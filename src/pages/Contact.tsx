@@ -1,247 +1,328 @@
-import { useState } from 'react';
-import Reveal from '../components/Reveal';
+import { useState, type FormEvent } from "react";
+import Reveal from "../components/Reveal";
+import AtmosphericBg from "../components/AtmosphericBg";
 
-const contactInfo = [
+const contactLinks = [
   {
+    label: "Email",
+    detail: "Let's talk",
+    href: "mailto:imanuelladaniel@gmail.com",
     icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="2" y="4" width="20" height="16" rx="2" /><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.6"
+      >
+        <rect x="2.5" y="4.5" width="19" height="15" rx="2.5" />
+        <path d="m3 7 8 6a1.8 1.8 0 0 0 2 0l8-6" />
       </svg>
     ),
-    label: 'Email',
-    value: 'imanuelladaniel@gmail.com',
-    href: 'mailto:imanuelladaniel@gmail.com',
   },
   {
+    label: "LinkedIn",
+    detail: "Let's connect",
+    href: "https://linkedin.com/in/imanuella-daniel",
     icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+      <svg viewBox="0 0 24 24" fill="currentColor">
+        <path d="M5.2 3a2.2 2.2 0 1 0 0 4.4 2.2 2.2 0 0 0 0-4.4ZM3.3 9h3.8v12H3.3V9Zm6.1 0H13v1.6h.1A4.2 4.2 0 0 1 16.9 8c4 0 4.8 2.5 4.8 5.8V21h-3.8v-6.4c0-1.5 0-3.5-2.2-3.5s-2.6 1.7-2.6 3.4V21H9.4V9Z" />
       </svg>
     ),
-    label: 'LinkedIn',
-    value: 'linkedin.com/in/imanuella-daniel',
-    href: 'https://linkedin.com/in/imanuella-daniel',
   },
   {
+    label: "GitHub",
+    detail: "Explore my work",
+    href: "https://github.com/Imanuella-Daniel",
     icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+      <svg viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 .9a11.1 11.1 0 0 0-3.5 21.6c.55.1.76-.24.76-.53v-2.08c-3.1.67-3.76-1.31-3.76-1.31-.5-1.28-1.23-1.62-1.23-1.62-1-.69.08-.68.08-.68 1.1.08 1.68 1.13 1.68 1.13.98 1.68 2.57 1.2 3.2.92.1-.72.38-1.2.7-1.48-2.47-.28-5.06-1.24-5.06-5.5 0-1.22.43-2.22 1.13-3-.11-.28-.49-1.42.11-2.96 0 0 .93-.3 3.05 1.15a10.6 10.6 0 0 1 5.56 0c2.12-1.44 3.05-1.15 3.05-1.15.6 1.54.22 2.68.11 2.96.71.78 1.13 1.78 1.13 3 0 4.27-2.6 5.21-5.08 5.49.4.35.75 1.03.75 2.08v3.65c0 .29.2.64.77.53A11.1 11.1 0 0 0 12 .9Z" />
       </svg>
     ),
-    label: 'GitHub',
-    value: 'github.com/Imanuella-Daniel',
-    href: 'https://github.com/Imanuella-Daniel',
   },
   {
+    label: "WhatsApp",
+    detail: "Quick chat",
+    href: "https://wa.me/6285254606988",
     icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.6 3.38 2 2 0 0 1 3.58 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.96a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 20l1.2-5.3A8.4 8.4 0 1 1 21 11.5Z" />
+        <path d="M9 9.5c.7 2 1.8 3.1 3.8 4l1.2-1.2 2 .9-.2 1.8c-3.7.9-8.8-4.2-7.9-7.9l1.8-.2.9 2L9 9.5Z" />
       </svg>
     ),
-    label: 'WhatsApp',
-    value: '+62 852-5460-6988',
-    href: 'https://wa.me/6285254606988',
   },
 ];
 
+const projectTypes = ["Web Design", "Development", "UI/UX Design", "Other"];
+
+const initialForm = {
+  name: "",
+  email: "",
+  message: "",
+};
+
+const inputClass =
+  "w-full rounded-none border-0 border-b border-white/15 bg-transparent px-0 py-4 text-sm text-white outline-none transition-all duration-300 placeholder:text-slate-600 focus:border-[#3B82F6] focus:shadow-[0_1px_0_0_#3B82F6]";
+
 export default function Contact() {
-  const [form, setForm] = useState({ name: '', email: '', message: '' });
+  const [form, setForm] = useState(initialForm);
+  const [projectType, setProjectType] = useState("Web Design");
   const [sent, setSent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setSubmitting(true);
-    
+    setError("");
+
     try {
-      const response = await fetch("https://formsubmit.co/ajax/imanuelladaniel@gmail.com", {
-        method: "POST",
-        headers: { 
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        },
-        body: JSON.stringify({
+      const response = await fetch(
+        "https://formsubmit.co/ajax/imanuelladaniel@gmail.com",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
             name: form.name,
             email: form.email,
             message: form.message,
-            _subject: "Pesan Baru dari Portfolio"
-        })
-      });
+            projectType,
+            _subject: `Portfolio Inquiry — ${projectType}`,
+          }),
+        },
+      );
 
-      if (response.ok) {
-        setSent(true);
-      } else {
-        alert("Gagal mengirim pesan, silakan coba lagi.");
+      if (!response.ok) {
+        throw new Error("Pengiriman pesan gagal. Silakan coba kembali.");
       }
-    } catch (error) {
-      alert("Gagal mengirim pesan, pastikan koneksi internet Anda stabil.");
+
+      setSent(true);
+    } catch {
+      setError(
+        "Pesan belum berhasil dikirim. Periksa koneksi internet dan coba lagi.",
+      );
     } finally {
       setSubmitting(false);
     }
   }
 
-  const inputStyle = {
-    width: '100%',
-    background: '#131720',
-    border: '1px solid #232b3a',
-    borderRadius: 8,
-    padding: '11px 14px',
-    color: '#e1e8f4',
-    fontSize: 14,
-    outline: 'none',
-    transition: 'border-color 0.15s',
-    boxSizing: 'border-box' as const,
-    fontFamily: 'Inter, sans-serif',
-  };
-
   return (
-    <div style={{ width: '100%', maxWidth: 1200, margin: '0 auto', padding: '64px 24px 100px' }}>
+    <main className="relative isolate min-h-screen w-full overflow-hidden bg-[#05070D] text-white">
+      <AtmosphericBg />
 
-      {/* Header */}
-      <Reveal delay={0.1}>
-        <div style={{ marginBottom: 48 }}>
-          <div style={{ fontFamily: 'JetBrains Mono, monospace', color: '#2dd4bf', fontSize: 12, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 10 }}>Kontak</div>
-          <h1 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 'clamp(36px, 5vw, 52px)', fontWeight: 800, color: '#e1e8f4', margin: '0 0 14px 0', letterSpacing: '-0.02em', lineHeight: 1.1 }}>
-            Ayo Terhubung
-          </h1>
-          <p style={{ color: '#5e6e86', fontSize: 15, lineHeight: 1.7, maxWidth: 520, margin: '0 0 18px 0' }}>
-            Ada pertanyaan, peluang kerja, atau ingin berdiskusi mengenai proyek? Silakan kirim pesan atau hubungi saya secara langsung.
-          </p>
-          <div style={{ width: 40, height: 3, background: '#2dd4bf', borderRadius: 2 }} />
-        </div>
-      </Reveal>
+      <div className="mx-auto max-w-7xl px-5 pb-20 pt-12 sm:px-8 sm:pt-20 lg:px-12 lg:pt-24">
+        <div className="grid grid-cols-1 gap-14 pt-8 lg:grid-cols-[0.78fr_1.22fr] lg:gap-20 lg:pt-12">
+          <Reveal delay={0.16}>
+            <aside className="flex flex-col">
+              <div className="mb-7">
+                <p className="text-[10px] uppercase tracking-[0.25em] text-slate-500">
+                  Find me on
+                </p>
+              </div>
 
-      {/* Main Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.4fr] gap-12 items-start">
-        {/* Left: Contact info */}
-        <Reveal delay={0.2}>
-          <div>
-            <h2 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 20, fontWeight: 700, color: '#e1e8f4', margin: '0 0 20px 0' }}>Informasi Kontak</h2>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 32 }}>
-              {contactInfo.map(item => (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 14,
-                    padding: '14px 16px',
-                    background: '#131720',
-                    border: '1px solid #232b3a',
-                    borderRadius: 10,
-                    textDecoration: 'none',
-                    transition: 'border-color 0.2s, background 0.2s, transform 0.2s',
-                  }}
-                  onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(45,212,191,0.35)'; e.currentTarget.style.background = 'rgba(45,212,191,0.03)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
-                  onMouseLeave={e => { e.currentTarget.style.borderColor = '#232b3a'; e.currentTarget.style.background = '#131720'; e.currentTarget.style.transform = 'translateY(0)'; }}
-                >
-                  <div style={{ color: '#2dd4bf', width: 20, flexShrink: 0 }}>{item.icon}</div>
-                  <div>
-                    <div style={{ color: '#5e6e86', fontSize: 11, marginBottom: 2 }}>{item.label}</div>
-                    <div style={{ color: '#e1e8f4', fontSize: 13, fontWeight: 500 }}>{item.value}</div>
-                  </div>
-                </a>
-              ))}
-            </div>
-          </div>
-        </Reveal>
-
-        {/* Right: Contact form */}
-        <Reveal delay={0.3}>
-          <div style={{ height: '100%' }}>
-            <div style={{ background: '#131720', border: '1px solid #232b3a', borderRadius: 12, padding: '32px 28px', height: '100%', boxSizing: 'border-box' }}>
-              <h2 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 20, fontWeight: 700, color: '#e1e8f4', margin: '0 0 22px 0' }}>Kirim Pesan</h2>
-
-              {sent ? (
-                <div style={{ textAlign: 'center', padding: '40px 20px' }}>
-                  <div style={{ fontSize: 40, marginBottom: 16 }}>✉️</div>
-                  <div style={{ fontFamily: 'Outfit, sans-serif', color: '#e1e8f4', fontSize: 20, fontWeight: 700, marginBottom: 8 }}>Pesan Terkirim!</div>
-                  <p style={{ color: '#5e6e86', fontSize: 14, lineHeight: 1.6, margin: '0 0 20px 0' }}>Terima kasih sudah menghubungi saya. Saya akan membalas dalam 1–2 hari kerja.</p>
-                  <button
-                    onClick={() => { setSent(false); setForm({ name: '', email: '', message: '' }); }}
-                    style={{ background: 'rgba(45,212,191,0.1)', border: '1px solid rgba(45,212,191,0.25)', color: '#2dd4bf', borderRadius: 7, padding: '8px 18px', fontSize: 13, cursor: 'pointer', fontFamily: 'Inter, sans-serif' }}
+              <div className="divide-y divide-white/[0.08] border-y border-white/[0.08]">
+                {contactLinks.map((item, index) => (
+                  <a
+                    key={item.label}
+                    href={item.href}
+                    target={
+                      item.href.startsWith("mailto:") ? undefined : "_blank"
+                    }
+                    rel={
+                      item.href.startsWith("mailto:")
+                        ? undefined
+                        : "noopener noreferrer"
+                    }
+                    className="group flex items-center gap-4 py-5 no-underline transition-all duration-300 hover:px-2"
                   >
-                    Kirim Pesan Lagi
+                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.025] text-slate-400 transition-all duration-300 group-hover:border-blue-400/40 group-hover:bg-blue-500/10 group-hover:text-blue-300">
+                      <span className="h-5 w-5">{item.icon}</span>
+                    </span>
+
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-sm font-medium text-slate-200 transition-colors group-hover:text-white">
+                        {item.label}
+                      </span>
+                      <span className="mt-1 block text-xs text-slate-500">
+                        {item.detail}
+                      </span>
+                    </span>
+
+                    <span className="mr-1 font-mono text-xs text-slate-600 transition-all duration-300 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-blue-400">
+                      ↗
+                    </span>
+                    <span className="sr-only">{`Open ${item.label}`}</span>
+                    <span className="sr-only">{index + 1}</span>
+                  </a>
+                ))}
+              </div>
+            </aside>
+          </Reveal>
+
+          <Reveal delay={0.22}>
+            <section id="contact-form" className="scroll-mt-10">
+              {sent ? (
+                <div
+                  role="status"
+                  className="flex min-h-[440px] flex-col items-start justify-center py-12"
+                >
+                  <div className="mb-7 flex h-14 w-14 items-center justify-center rounded-2xl border border-blue-400/30 bg-blue-500/10 text-blue-300 shadow-[0_0_40px_rgba(59,130,246,0.12)]">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      className="h-7 w-7"
+                    >
+                      <path d="m5 12 4 4L19 6" />
+                    </svg>
+                  </div>
+
+                  <p className="text-xs uppercase tracking-[0.25em] text-blue-400">
+                    Message delivered
+                  </p>
+                  <h2 className="mt-4 text-4xl font-medium tracking-tight sm:text-5xl">
+                    THANK YOU<span className="text-blue-500">.</span>
+                  </h2>
+                  <p className="mt-5 max-w-sm text-sm leading-7 text-slate-400">
+                    Your message has been sent. I'll get back to you within 1–2
+                    business days.
+                  </p>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSent(false);
+                      setForm(initialForm);
+                      setProjectType("Web Design");
+                      setError("");
+                    }}
+                    className="mt-8 inline-flex items-center gap-3 rounded-full border border-blue-400/30 px-6 py-3 text-xs font-medium text-blue-300 transition-all duration-300 hover:border-blue-400 hover:bg-blue-500/10"
+                  >
+                    Send another message <span>↗</span>
                   </button>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit}>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                <>
+                  <div className="mb-9 flex items-start justify-between gap-4">
                     <div>
-                      <label style={{ display: 'block', color: '#8a9ab5', fontSize: 12, marginBottom: 6, fontWeight: 500 }}>Nama Anda</label>
-                      <input
-                        required
-                        type="text"
-                        placeholder="Nama lengkap"
-                        value={form.name}
-                        onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
-                        style={inputStyle}
-                        onFocus={e => (e.target.style.borderColor = 'rgba(45,212,191,0.5)')}
-                        onBlur={e => (e.target.style.borderColor = '#232b3a')}
-                      />
+                      <h2 className="mt-3 text-2xl font-medium tracking-tight sm:text-3xl">
+                        Tell me about it.
+                      </h2>
                     </div>
-                    <div>
-                      <label style={{ display: 'block', color: '#8a9ab5', fontSize: 12, marginBottom: 6, fontWeight: 500 }}>Alamat Email</label>
-                      <input
-                        required
-                        type="email"
-                        placeholder="email@perusahaan.com"
-                        value={form.email}
-                        onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
-                        style={inputStyle}
-                        onFocus={e => (e.target.style.borderColor = 'rgba(45,212,191,0.5)')}
-                        onBlur={e => (e.target.style.borderColor = '#232b3a')}
-                      />
-                    </div>
-                    <div>
-                      <label style={{ display: 'block', color: '#8a9ab5', fontSize: 12, marginBottom: 6, fontWeight: 500 }}>Pesan</label>
-                      <textarea
-                        required
-                        placeholder="Ceritakan tentang kesempatan atau proyek yang ingin Anda diskusikan..."
-                        value={form.message}
-                        onChange={e => setForm(f => ({ ...f, message: e.target.value }))}
-                        rows={5}
-                        style={{ ...inputStyle, resize: 'vertical', minHeight: 120 }}
-                        onFocus={e => (e.target.style.borderColor = 'rgba(45,212,191,0.5)')}
-                        onBlur={e => (e.target.style.borderColor = '#232b3a')}
-                      />
-                    </div>
-                    <button
-                      type="submit"
-                      disabled={submitting}
-                      style={{
-                        padding: '12px 24px',
-                        background: submitting ? '#115e59' : '#2dd4bf',
-                        color: submitting ? '#8a9ab5' : '#0c0e13',
-                        borderRadius: 8,
-                        fontWeight: 700,
-                        fontSize: 14,
-                        border: 'none',
-                        cursor: submitting ? 'not-allowed' : 'pointer',
-                        transition: 'opacity 0.15s, background 0.2s',
-                        fontFamily: 'Inter, sans-serif',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: 8,
-                      }}
-                      onMouseEnter={e => { if(!submitting) e.currentTarget.style.opacity = '0.85' }}
-                      onMouseLeave={e => { if(!submitting) e.currentTarget.style.opacity = '1' }}
-                    >
-                      {submitting ? 'Mengirim...' : 'Kirim Pesan'}
-                      {!submitting && <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>}
-                    </button>
                   </div>
-                </form>
+
+                  <form onSubmit={handleSubmit} className="space-y-8">
+                    <div className="grid grid-cols-1 gap-7 sm:grid-cols-2 sm:gap-6">
+                      <div className="group">
+                        <label
+                          htmlFor="contact-name"
+                          className="mb-1 block text-xs text-slate-400 transition-colors group-focus-within:text-blue-300"
+                        >
+                          Your name <span className="text-blue-400">*</span>
+                        </label>
+                        <input
+                          id="contact-name"
+                          name="name"
+                          required
+                          autoComplete="name"
+                          type="text"
+                          placeholder="John Doe"
+                          value={form.name}
+                          onChange={(e) =>
+                            setForm((f) => ({ ...f, name: e.target.value }))
+                          }
+                          className={inputClass}
+                        />
+                      </div>
+
+                      <div className="group">
+                        <label
+                          htmlFor="contact-email"
+                          className="mb-1 block text-xs text-slate-400 transition-colors group-focus-within:text-blue-300"
+                        >
+                          Email address <span className="text-blue-400">*</span>
+                        </label>
+                        <input
+                          id="contact-email"
+                          name="email"
+                          required
+                          autoComplete="email"
+                          type="email"
+                          placeholder="john@company.com"
+                          value={form.email}
+                          onChange={(e) =>
+                            setForm((f) => ({ ...f, email: e.target.value }))
+                          }
+                          className={inputClass}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="group">
+                      <div className="mb-1 flex items-center justify-between gap-3">
+                        <label
+                          htmlFor="contact-message"
+                          className="text-xs text-slate-400 transition-colors group-focus-within:text-blue-300"
+                        >
+                          Message <span className="text-blue-400">*</span>
+                        </label>
+                        <span className="font-mono text-[10px] text-slate-600">
+                          {form.message.length} / 1000
+                        </span>
+                      </div>
+
+                      <textarea
+                        id="contact-message"
+                        name="message"
+                        required
+                        maxLength={1000}
+                        rows={4}
+                        placeholder="Tell me about your idea, goals, timeline, or anything else I should know..."
+                        value={form.message}
+                        onChange={(e) =>
+                          setForm((f) => ({ ...f, message: e.target.value }))
+                        }
+                        className={`${inputClass} min-h-[120px] resize-y leading-7`}
+                      />
+                    </div>
+
+                    {error && (
+                      <p
+                        role="alert"
+                        className="rounded-xl border border-red-400/20 bg-red-400/[0.06] px-4 py-3 text-sm leading-6 text-red-300"
+                      >
+                        {error}
+                      </p>
+                    )}
+
+                    <div className="flex flex-col items-start gap-4 pt-1 sm:flex-row sm:items-center sm:justify-between">
+                      <button
+                        type="submit"
+                        disabled={submitting}
+                        className="group relative inline-flex w-full items-center justify-center gap-4 overflow-hidden rounded-full border border-white/10 bg-white/[0.025] px-7 py-4 text-sm font-medium text-slate-300 transition-all duration-300 hover:border-blue-400/40 hover:bg-blue-500/10 hover:text-white active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+                      >
+                        <span className="relative">
+                          {submitting ? "Sending..." : "Send message"}
+                        </span>
+                      </button>
+                    </div>
+                  </form>
+                </>
               )}
-            </div>
-          </div>
-        </Reveal>
+            </section>
+          </Reveal>
+        </div>
       </div>
-    </div>
+    </main>
   );
 }
-

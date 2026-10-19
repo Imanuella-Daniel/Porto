@@ -1,7 +1,6 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router';
-import type { Project } from '../data/projects';
-import ProjectImage from './ProjectImage';
+import { useNavigate } from "react-router";
+import type { Project } from "../data/projects";
+import ProjectImage from "./ProjectImage";
 
 interface ProjectCardProps {
   project: Project;
@@ -9,86 +8,76 @@ interface ProjectCardProps {
 
 export default function ProjectCard({ project }: ProjectCardProps) {
   const navigate = useNavigate();
-  const [hovered, setHovered] = useState(false);
+  const screenshot = project.screenshots?.[0];
 
   return (
-    <div
+    <article
       onClick={() => navigate(`/projects/${project.id}`)}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        background: '#131720',
-        border: `1px solid ${hovered ? 'rgba(45,212,191,0.4)' : '#232b3a'}`,
-        borderRadius: 12,
-        overflow: 'hidden',
-        cursor: 'pointer',
-        transition: 'border-color 0.2s, transform 0.2s, box-shadow 0.2s',
-        transform: hovered ? 'translateY(-3px)' : 'translateY(0)',
-        boxShadow: hovered ? '0 12px 32px rgba(0,0,0,0.4)' : 'none',
-        display: 'flex',
-        flexDirection: 'column',
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          navigate(`/projects/${project.id}`);
+        }
       }}
+      role="link"
+      tabIndex={0}
+      aria-label={`Lihat proyek ${project.title}`}
+      className="group relative flex h-full min-w-0 cursor-pointer flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/[0.025] backdrop-blur-sm transition-all duration-500 hover:border-blue-400/40 hover:bg-white/[0.035] hover:shadow-[0_0_40px_rgba(59,130,246,0.12)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
     >
-      {/* Screenshot area */}
-      <div style={{ height: 220, overflow: 'hidden', borderBottom: '1px solid #232b3a', flexShrink: 0 }}>
-        <div style={{ height: '100%', transform: hovered ? 'scale(1.02)' : 'scale(1)', transition: 'transform 0.3s' }}>
-          <ProjectImage src={project.screenshots[0].src} alt={`${project.title} — ${project.screenshots[0].label}`} />
-        </div>
+      {/* Thumbnail: consistent aspect ratio */}
+      <div className="relative aspect-[16/10] w-full shrink-0 overflow-hidden border-b border-white/10 bg-[#060810]">
+        {screenshot ? (
+          <div className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-[1.04]">
+            <ProjectImage
+              src={screenshot.src}
+              alt={`${project.title} — ${screenshot.label}`}
+            />
+          </div>
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center bg-[radial-gradient(ellipse_at_center,rgba(37,99,235,0.18),transparent_70%)]">
+            <span className="font-serif text-2xl italic text-white/40">
+              {project.title}
+            </span>
+          </div>
+        )}
+
+        <div className="absolute inset-0 bg-gradient-to-t from-[#05070D]/90 via-black/15 to-transparent opacity-80 transition-opacity duration-300 group-hover:opacity-95" />
       </div>
 
-      {/* Card content */}
-      <div style={{ padding: '18px 20px 20px', flex: 1, display: 'flex', flexDirection: 'column' }}>
-        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 8 }}>
-          <div>
-            <div style={{ color: '#5e6e86', fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 4, fontFamily: 'JetBrains Mono, monospace' }}>
-              {project.category.split(' · ')[0]}
-            </div>
-            <h3 style={{ color: '#e1e8f4', fontSize: 17, fontWeight: 700, margin: 0, fontFamily: 'Outfit, sans-serif' }}>
-              {project.title}
-            </h3>
-          </div>
-          <div style={{ color: '#5e6e86', fontSize: 11, flexShrink: 0, marginTop: 2 }}>{project.year}</div>
+      {/* Content */}
+      <div className="flex flex-1 flex-col p-4 sm:p-5">
+        <div className="mb-2 flex items-center justify-between gap-3">
+          <span className="min-w-0 truncate text-[11px] font-medium uppercase tracking-[0.18em] text-blue-400">
+            {project.category.split(" · ")[0]}
+          </span>
+
+          <span className="shrink-0 font-mono text-xs text-slate-500">
+            {project.year}
+          </span>
         </div>
 
-        <p style={{ color: '#5e6e86', fontSize: 13, lineHeight: 1.55, margin: '0 0 14px 0', flex: 1 }}>
+        <p className="mt-2 line-clamp-3 text-sm leading-5 text-slate-400">
           {project.tagline}
         </p>
 
         {/* Tech tags */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5, marginBottom: 16 }}>
-          {project.tech.slice(0, 4).map(t => (
-            <span key={t} 
-              className="transition-colors duration-200 cursor-default hover:bg-accent hover:text-bg"
-              style={{
-              fontSize: 10, padding: '2px 8px', borderRadius: 4,
-              background: 'rgba(45,212,191,0.08)', color: '#2dd4bf',
-              border: '1px solid rgba(45,212,191,0.15)',
-              fontFamily: 'JetBrains Mono, monospace',
-            }}>{t}</span>
+        <div className="mt-auto pt-3 flex flex-wrap content-start gap-2">
+          {project.tech.slice(0, 4).map((tech) => (
+            <span
+              key={tech}
+              className="h-fit rounded-full border border-white/10 bg-white/[0.025] px-3 py-1 font-mono text-[11px] text-slate-300 transition-colors group-hover:border-blue-400/25 group-hover:text-slate-200"
+            >
+              {tech}
+            </span>
           ))}
+
           {project.tech.length > 4 && (
-            <span style={{ fontSize: 10, color: '#5e6e86', padding: '2px 0' }}>+{project.tech.length - 4} more</span>
+            <span className="self-start py-1 font-mono text-[11px] text-slate-500">
+              +{project.tech.length - 4}
+            </span>
           )}
         </div>
-
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <span style={{ color: '#2dd4bf', fontSize: 12, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4 }}>
-            View Case Study
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M5 12h14M12 5l7 7-7 7"/>
-            </svg>
-          </span>
-          <div style={{ display: 'flex', gap: 8 }}>
-            <a href={project.github} onClick={e => e.stopPropagation()} className="transition-colors duration-200 hover:text-accent" style={{ color: '#5e6e86', fontSize: 11, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 3 }}>
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-              GitHub
-            </a>
-            {project.demo && (
-              <a href={project.demo} onClick={e => e.stopPropagation()} style={{ color: '#5e6e86', fontSize: 11, textDecoration: 'none' }}>Demo</a>
-            )}
-          </div>
-        </div>
       </div>
-    </div>
+    </article>
   );
 }

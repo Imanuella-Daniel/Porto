@@ -1,83 +1,105 @@
-import { useState } from 'react';
-import { projects } from '../data/projects';
-import ProjectCard from '../components/ProjectCard';
-import Reveal from '../components/Reveal';
+import { useState } from "react";
+import { projects } from "../data/projects";
+import ProjectCard from "../components/ProjectCard";
+import Reveal from "../components/Reveal";
+import AtmosphericBg from "../components/AtmosphericBg";
 
-const filters = ['Semua', 'Web Development', 'Mobile Development', 'UI/UX Design', 'Information System'];
+const filters = [
+  "Semua",
+  "Web Development",
+  "Mobile Development",
+  "Information System",
+];
 
 export default function Projects() {
-  const [active, setActive] = useState('Semua');
+  const [active, setActive] = useState("Semua");
 
-  const filtered = active === 'Semua'
-    ? projects
-    : projects.filter(p => p.category.toLowerCase().includes(active.toLowerCase()));
+  const filtered =
+    active === "Semua"
+      ? projects
+      : projects.filter((p) =>
+          p.category.toLowerCase().includes(active.toLowerCase()),
+        );
 
   return (
-    <div style={{ width: '100%', maxWidth: 1200, margin: '0 auto', padding: '64px 24px 100px' }}>
+    <main className="relative isolate min-h-screen w-full overflow-hidden bg-[#05070D] text-white">
+      <AtmosphericBg />
 
-      {/* Header */}
-      <Reveal delay={0.1}>
-        <div style={{ marginBottom: 48 }}>
-          <div style={{ fontFamily: 'JetBrains Mono, monospace', color: '#2dd4bf', fontSize: 12, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 10 }}>Portofolio</div>
-          <h1 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 'clamp(36px, 5vw, 52px)', fontWeight: 800, color: '#e1e8f4', margin: '0 0 14px 0', letterSpacing: '-0.02em', lineHeight: 1.1 }}>
-            Proyek Saya
-          </h1>
-          <p style={{ color: '#5e6e86', fontSize: 15, lineHeight: 1.7, maxWidth: 560, margin: '0 0 18px 0' }}>
-            Kumpulan proyek yang pernah saya kerjakan — dari tugas akademik hingga implementasi nyata. Klik proyek untuk melihat detail, kode, dan tangkapan layar.
-          </p>
-          <div style={{ width: 40, height: 3, background: '#2dd4bf', borderRadius: 2 }} />
-        </div>
-      </Reveal>
+      <div className="mx-auto max-w-7xl px-5 pb-24 pt-10 sm:px-8 sm:pt-16 lg:px-12">
+        <Reveal delay={0.1}>
+          <section className="mb-8 sm:mb-10">
+            <h1 className="text-3xl font-medium tracking-tight text-white sm:text-4xl md:text-5xl">
+              Proyek
+              <span className="text-blue-500">.</span>
+            </h1>
 
-      {/* Filter tabs */}
-      <Reveal delay={0.2}>
-        <div style={{ display: 'flex', gap: 6, marginBottom: 40, flexWrap: 'wrap' }}>
-          {filters.map(f => (
-            <button
-              key={f}
-              onClick={() => setActive(f)}
-              style={{
-                padding: '7px 16px',
-                borderRadius: 6,
-                fontSize: 12,
-                fontWeight: 500,
-                border: `1px solid ${active === f ? 'rgba(45,212,191,0.5)' : '#232b3a'}`,
-                background: active === f ? 'rgba(45,212,191,0.08)' : 'transparent',
-                color: active === f ? '#2dd4bf' : '#5e6e86',
-                cursor: 'pointer',
-                transition: 'all 0.15s',
-                fontFamily: 'Inter, sans-serif',
-              }}
-              onMouseEnter={e => { if (active !== f) { e.currentTarget.style.color = '#e1e8f4'; e.currentTarget.style.borderColor = '#5e6e86'; } }}
-              onMouseLeave={e => { if (active !== f) { e.currentTarget.style.color = '#5e6e86'; e.currentTarget.style.borderColor = '#232b3a'; } }}
-            >
-              {f}
-            </button>
-          ))}
-          <span style={{ marginLeft: 'auto', color: '#5e6e86', fontSize: 12, alignSelf: 'center', fontFamily: 'JetBrains Mono, monospace' }}>
-            {filtered.length} proyek
-          </span>
-        </div>
-      </Reveal>
+            <p className="mt-2.5 max-w-xl text-sm leading-relaxed text-slate-400 sm:text-base">
+              Kumpulan proyek yang saya kembangkan.
+            </p>
+          </section>
+        </Reveal>
 
-      {/* Project grid */}
-      {filtered.length > 0 ? (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: 24 }}>
-          {filtered.map((project, index) => (
-            <Reveal key={project.id} delay={0.1 * index}>
-              <ProjectCard project={project} />
-            </Reveal>
-          ))}
-        </div>
-      ) : (
-        <Reveal delay={0.2}>
-          <div style={{ textAlign: 'center', padding: '60px 20px', color: '#5e6e86' }}>
-            <div style={{ fontSize: 32, marginBottom: 12 }}>🔍</div>
-            <p>Belum ada proyek dalam kategori ini.</p>
+        <Reveal delay={0.14}>
+          <div className="mb-10 flex flex-wrap items-center justify-between gap-4 border-t border-white/[0.05] pt-6">
+            <div className="flex flex-wrap items-center gap-2">
+              {filters.map((f) => {
+                const isSelected = active === f;
+                return (
+                  <button
+                    key={f}
+                    type="button"
+                    onClick={() => setActive(f)}
+                    className={`group relative overflow-hidden rounded-full border px-4 py-2.5 text-xs transition-all duration-300 cursor-pointer ${
+                      isSelected
+                        ? "border-blue-400/70 bg-blue-500/15 text-blue-200 shadow-[0_0_24px_rgba(59,130,246,0.12)]"
+                        : "border-white/10 bg-white/[0.02] text-slate-400 hover:border-blue-400/40 hover:text-slate-200"
+                    }`}
+                  >
+                    {isSelected && (
+                      <span className="mr-2 text-blue-400">✳</span>
+                    )}
+                    {f}
+                  </button>
+                );
+              })}
+            </div>
+
+            <span className="font-mono text-xs text-slate-500">
+              Menampilkan {filtered.length} dari {projects.length} proyek
+            </span>
           </div>
         </Reveal>
-      )}
-    </div>
+
+        {filtered.length > 0 ? (
+          <div className="grid grid-cols-1 gap-7 sm:grid-cols-2 lg:grid-cols-3">
+            {filtered.map((project, index) => (
+              <Reveal
+                key={project.id}
+                delay={Math.min(0.08 * index, 0.4)}
+                className="h-full"
+              >
+                <ProjectCard project={project} />
+              </Reveal>
+            ))}
+          </div>
+        ) : (
+          <Reveal delay={0.2}>
+            <div className="flex min-h-[300px] flex-col items-center justify-center rounded-2xl border border-dashed border-white/10 py-16 text-center">
+              <span className="font-mono text-2xl text-blue-400 mb-3">⬡</span>
+              <p className="text-sm text-slate-400">
+                Belum ada proyek dalam kategori ini.
+              </p>
+              <button
+                type="button"
+                onClick={() => setActive("Semua")}
+                className="mt-4 text-xs font-medium uppercase tracking-[0.16em] text-blue-400 hover:text-blue-300 cursor-pointer"
+              >
+                Reset Filter ↗
+              </button>
+            </div>
+          </Reveal>
+        )}
+      </div>
+    </main>
   );
 }
-

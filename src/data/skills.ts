@@ -54,6 +54,7 @@ export const skillCategories: SkillCategory[] = [
       { name: 'VS Code', tag: 'Code Editor' },
       { name: 'Railway', tag: 'Deployment' },
       { name: 'Figma', tag: 'UI/UX Design' },
+      { name: 'Draw.io', tag: 'Diagram & ERD' },
       { name: 'Blender', tag: '3D Modeling' },
       { name: 'Canva', tag: 'Graphic Design' },
     ],

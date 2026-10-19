@@ -9,9 +9,12 @@ interface RevealProps {
 }
 
 export default function Reveal({ children, delay = 0, width = '100%', className = '' }: RevealProps) {
+  const isHFull = className.includes('h-full');
+
   return (
     <div style={{ width }} className={className}>
       <motion.div
+        className={isHFull ? 'h-full' : ''}
         variants={{
           hidden: { opacity: 0, y: 15 },
           visible: { opacity: 1, y: 0 },

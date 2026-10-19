@@ -1,28 +1,44 @@
-import { Link } from 'react-router';
+import { Link } from "react-router";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-border mt-20 md:mt-28">
-      <div className="max-w-[1200px] mx-auto px-5 md:px-8 py-8">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <div
-              className="w-6 h-6 rounded flex items-center justify-center text-xs font-bold"
-              style={{ background: 'linear-gradient(135deg, #2dd4bf 0%, #0d9488 100%)', color: '#0c0e13', fontFamily: 'Outfit, sans-serif' }}
-            >
+    <footer className="border-t border-white/10 bg-[#05070D]">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 py-10">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
+          <div className="flex items-center gap-3">
+            <div className="w-7 h-7 rounded-full border border-blue-400/30 bg-blue-500/10 flex items-center justify-center text-[11px] font-serif italic text-blue-300 shadow-[0_0_12px_rgba(59,130,246,0.15)]">
               ID
             </div>
-            <span className="text-muted text-sm">© 2025 Imanuella Daniel. Seluruh hak cipta dilindungi.</span>
+            <span className="text-slate-400 text-xs font-sans">
+              © {new Date().getFullYear()} Imanuella Daniel. Seluruh hak cipta dilindungi.
+            </span>
           </div>
-          <div className="flex items-center gap-5">
-            <a href="https://github.com/Imanuella-Daniel" className="text-muted hover:text-accent text-sm no-underline transition-colors duration-150">
+
+          <div className="flex items-center gap-6">
+            <a
+              href="https://github.com/Imanuella-Daniel"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-slate-400 hover:text-blue-300 text-xs sm:text-sm no-underline transition-colors font-sans"
+            >
               GitHub
             </a>
-            <a href="https://linkedin.com/in/imanuella-daniel" className="text-muted hover:text-accent text-sm no-underline transition-colors duration-150">
+            <a
+              href="https://linkedin.com/in/imanuella-daniel"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-slate-400 hover:text-blue-300 text-xs sm:text-sm no-underline transition-colors font-sans"
+            >
               LinkedIn
             </a>
-            <Link to="/contact" className="text-muted hover:text-accent text-sm no-underline transition-colors duration-150">
-              Kontak
+            <Link
+              to="/contact"
+              className="group inline-flex items-center gap-1.5 text-slate-400 hover:text-blue-300 text-xs sm:text-sm no-underline transition-colors font-sans"
+            >
+              <span>Kontak</span>
+              <span className="font-mono text-xs transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 text-blue-400">
+                ↗
+              </span>
             </Link>
           </div>
         </div>

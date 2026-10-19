@@ -1,132 +1,215 @@
-import { Link } from 'react-router';
-import { getFeaturedProjects } from '../data/projects';
-import ProjectCard from '../components/ProjectCard';
-import Reveal from '../components/Reveal';
+import { Link } from "react-router";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { getFeaturedProjects, type Project } from "../data/projects";
+import Reveal from "../components/Reveal";
+import AtmosphericBg from "../components/AtmosphericBg";
 
-const social = [
-  {
-    label: 'GitHub',
-    href: 'https://github.com/Imanuella-Daniel',
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
-      </svg>
-    ),
-  },
-  {
-    label: 'LinkedIn',
-    href: 'https://linkedin.com/in/imanuella-daniel',
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-      </svg>
-    ),
-  },
-  {
-    label: 'Email',
-    href: 'mailto:imanuelladaniel@gmail.com',
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="2" y="4" width="20" height="16" rx="2" /><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-      </svg>
-    ),
-  },
-];
+function ProjectHoverSlider({ project }: { project: Project }) {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const shots = project.screenshots ?? [];
+
+  const stopCycling = useCallback((reset = true) => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+
+    if (reset) {
+      setActiveIndex(0);
+    }
+  }, []);
+
+  const startCycling = useCallback(() => {
+    if (shots.length <= 1 || intervalRef.current) return;
+
+    intervalRef.current = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % shots.length);
+    }, 2200);
+  }, [shots.length]);
+
+  useEffect(() => {
+    return () => stopCycling(false);
+  }, [stopCycling]);
+
+  return (
+    <Link
+      to={`/projects/${project.id}`}
+      aria-label={`Lihat proyek ${project.title}`}
+      className="group relative block aspect-[16/10] overflow-hidden rounded-2xl border border-white/10 bg-[#0a0d17]/80 no-underline outline-none transition-all duration-500 hover:border-blue-400/40 hover:shadow-[0_0_40px_rgba(59,130,246,0.15)] focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-4 focus-visible:ring-offset-[#05070D]"
+      onMouseEnter={startCycling}
+      onMouseLeave={() => stopCycling()}
+      onFocus={startCycling}
+      onBlur={() => stopCycling()}
+    >
+      {shots.length > 0 ? (
+        shots.map((shot, index) => (
+          <img
+            key={shot.src}
+            src={shot.src}
+            alt={index === 0 ? project.title : shot.label}
+            loading="lazy"
+            decoding="async"
+            className="absolute inset-0 h-full w-full object-cover transition-[opacity,transform] duration-700 ease-out group-hover:scale-[1.04]"
+            style={{
+              opacity: index === activeIndex ? 1 : 0,
+            }}
+          />
+        ))
+      ) : (
+        <div className="absolute inset-0 flex items-center justify-center bg-[radial-gradient(ellipse_at_center,rgba(59,130,246,0.15),transparent_65%)]">
+          <span className="font-serif text-3xl italic text-white/40">
+            {project.title}
+          </span>
+        </div>
+      )}
+
+      <div className="absolute inset-0 bg-gradient-to-t from-[#05070D] via-black/40 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-90" />
+
+      <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(59,130,246,0.12),transparent_45%)] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 flex translate-y-3 flex-col gap-3 p-6 opacity-0 transition-all duration-500 sm:p-7 group-hover:translate-y-0 group-hover:opacity-100">
+        <div>
+          <h3 className="font-sans text-xl font-medium tracking-tight text-white sm:text-2xl">
+            {project.title}
+          </h3>
+        </div>
+      </div>
+    </Link>
+  );
+}
 
 export default function Home() {
   const featured = getFeaturedProjects();
 
   return (
-    <div>
-      {/* Hero */}
-      <section className="min-h-[calc(100vh-64px)] flex items-center py-20 relative overflow-hidden">
-        <div className="absolute top-[15%] right-[20%] w-[500px] h-[500px] bg-[radial-gradient(circle,rgba(45,212,191,0.055)_0%,transparent_65%)] pointer-events-none" />
+    <main className="relative isolate min-h-screen w-full overflow-hidden bg-[#05070D] text-white">
+      <AtmosphericBg />
 
-        <div className="max-w-[1200px] mx-auto px-6 w-full flex gap-16 items-center relative z-10">
-          {/* Text side */}
-          <div className="flex-1 min-w-0">
-            <Reveal delay={0.1}>
-              <div className="flex items-center gap-2.5 mb-4 font-mono text-accent text-[13px]">
-                <span className="inline-block w-7 h-px bg-accent" />
-                Halo, saya
-              </div>
+      <section className="relative mx-auto flex max-w-7xl min-h-[calc(100svh-80px)] flex-col items-center justify-center px-5 py-20 text-center sm:px-8 sm:py-28 lg:px-12">
+        <div className="relative z-10 mx-auto flex w-full max-w-5xl flex-col items-center">
+          <Reveal delay={0.1}>
+            <h1 className="m-0 select-none text-[clamp(3.5rem,10.5vw,8.75rem)] font-medium leading-[0.88] tracking-[-0.075em] text-white">
+              IMANUELLA
+              <br />
+              <span className="bg-gradient-to-r from-blue-300 via-blue-500 to-indigo-400 bg-clip-text font-serif italic font-normal tracking-[-0.055em] text-transparent">
+                DANIEL
+              </span>
+              <span className="text-blue-500">.</span>
+            </h1>
 
-              <h1 className="font-display text-[clamp(48px,7vw,80px)] font-extrabold text-fg m-0 mb-1.5 leading-[1.04] tracking-[-0.025em]">
-                Imanuella Daniel
-              </h1>
+            <p className="mx-auto mt-8 max-w-2xl text-sm leading-7 text-slate-400 sm:text-base sm:leading-8">
+              Software Developer &amp; Information System Specialist. Membangun
+              pengalaman digital yang{" "}
+              <span className="text-white">fungsional, terstruktur,</span> dan
+              dirancang dengan presisi tujuan.
+            </p>
 
-              <div className="font-display text-[clamp(18px,2.5vw,24px)] text-accent font-semibold mb-5">
-                IT Graduate · Software Developer
-              </div>
+            <div className="mt-5 flex flex-wrap items-center justify-center gap-2.5 font-mono text-xs text-slate-500">
+              <span className="text-slate-300">Software Developer</span>
+              <span className="text-blue-400">/</span>
+              <span>Informatics Graduate</span>
+              <span className="text-blue-400">/</span>
+              <span>Yogyakarta, Indonesia</span>
+            </div>
 
-              <p className="text-base text-muted leading-relaxed max-w-[460px] m-0 mb-8">
-                Lulusan S1 Informatika yang antusias dalam membangun solusi digital yang bermanfaat, andal, dan mudah digunakan. Terbuka untuk posisi entry-level dan junior di bidang pengembangan web dan perangkat lunak.
-              </p>
-
-              <div className="flex gap-3 mb-8 flex-wrap">
-                <Link
-                  to="/projects"
-                  className="px-6 py-3 bg-accent text-bg rounded-lg font-bold text-sm no-underline inline-flex items-center gap-2 transition-all duration-300 hover:shadow-[0_4px_20px_rgba(45,212,191,0.25)] hover:-translate-y-1 hover:opacity-100"
+            <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+              <Link
+                to="/projects"
+                className="group relative inline-flex w-full items-center justify-center gap-3 overflow-hidden rounded-full bg-blue-500 px-8 py-4 text-sm font-medium text-white shadow-[0_0_32px_rgba(59,130,246,0.20)] transition-all duration-300 hover:bg-blue-400 hover:shadow-[0_0_42px_rgba(59,130,246,0.35)] active:scale-[0.98] sm:w-auto"
+              >
+                <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/15 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+                <span className="relative">Lihat Proyek</span>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  className="relative h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
+                  aria-hidden="true"
                 >
-                  Lihat Proyek Saya
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
-                </Link>
-                <a
-                  href="/src/assets/CV_Imanuella Daniel.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-6 py-3 bg-transparent text-fg rounded-lg font-semibold text-sm no-underline border border-border transition-all duration-300 hover:border-accent hover:text-accent hover:-translate-y-1 inline-flex items-center gap-2"
-                >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                  Lihat CV
-                </a>
-              </div>
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </Link>
 
-              <div className="flex gap-3.5 items-center">
-                {social.map(s => (
-                  <a
-                    key={s.label}
-                    href={s.href}
-                    aria-label={s.label}
-                    title={s.label}
-                    className="text-muted no-underline transition-all duration-300 hover:text-accent hover:-translate-y-1"
-                  >
-                    {s.icon}
-                  </a>
-                ))}
-              </div>
-            </Reveal>
-          </div>
+              <Link
+                to="/contact"
+                className="group inline-flex w-full items-center justify-center gap-3 rounded-full border border-white/15 bg-white/[0.03] px-8 py-4 text-sm font-medium text-slate-200 transition-all duration-300 hover:border-blue-400/40 hover:bg-blue-500/10 hover:text-white sm:w-auto"
+              >
+                <span>Hubungi Saya</span>
+                <span className="font-mono text-xs text-blue-400 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5">
+                  ↗
+                </span>
+              </Link>
+            </div>
 
-          {/* Avatar side */}
-          <div className="hidden md:flex shrink-0 justify-center">
-            <Reveal delay={0.2}>
-              <div className="relative group">
-                <div className="absolute -inset-px rounded-[20px] bg-gradient-to-br from-accent/30 to-transparent z-0 opacity-50 transition-opacity duration-500 group-hover:opacity-100" />
-                <div className="w-[300px] h-[380px] bg-gradient-to-br from-[#1a2033] to-[#131720] rounded-[18px] border border-accent/20 flex flex-col items-center justify-center relative overflow-hidden z-10 transition-transform duration-500 group-hover:-translate-y-2">
-                  <div className="absolute -top-[60px] -right-[60px] w-[180px] h-[180px] rounded-full border border-accent/[0.08] bg-[radial-gradient(circle,rgba(45,212,191,0.04)_0%,transparent_70%)]" />
-                  <div className="absolute -bottom-[40px] -left-[40px] w-[140px] h-[140px] rounded-full border border-accent/[0.06]" />
-                  <div className="w-[110px] h-[110px] rounded-full bg-gradient-to-br from-accent to-[#0d9488] flex items-center justify-center font-display font-extrabold text-[42px] text-bg mb-5 relative z-20">
-                    ID
-                  </div>
-                  <div className="text-center relative z-20">
-                    <div className="font-display text-fg font-bold text-xl mb-1">Imanuella Daniel</div>
-                    <div className="text-accent text-xs font-mono tracking-wider">IT Graduate · Software Developer</div>
-                    <div className="text-muted text-[11px] mt-1.5">Yogyakarta, Indonesia</div>
-                    <div className="flex gap-1.5 justify-center mt-4 flex-wrap px-4">
-                      {['PHP', 'Laravel', 'Flutter', 'MySQL'].map(t => (
-                        <span key={t} className="text-[10px] px-2 py-0.5 rounded bg-accent/10 text-accent border border-accent/15 font-mono">{t}</span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-                
+            <div className="mt-16 flex flex-col items-center gap-3 text-slate-500 sm:mt-20">
+              <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-slate-500">
+                Scroll to explore
+              </span>
+              <div className="relative h-10 w-px overflow-hidden bg-white/10">
+                <div className="absolute inset-x-0 top-0 h-1/2 animate-scroll-indicator bg-gradient-to-b from-blue-400 to-transparent" />
               </div>
-            </Reveal>
-          </div>
+            </div>
+          </Reveal>
         </div>
       </section>
 
-    </div>
+      <section
+        id="featured-projects"
+        className="relative mx-auto max-w-7xl px-5 pb-24 pt-12 sm:px-8 sm:pb-32 lg:px-12 border-t border-white/10"
+      >
+        <Reveal delay={0.1}>
+          <div className="mb-12 flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
+            <div>
+              <p className="mb-3 text-xs font-medium uppercase tracking-[0.3em] text-blue-400">
+                Selected Work
+              </p>
+
+              <h2 className="m-0 text-3xl font-medium tracking-[-0.04em] text-white sm:text-5xl">
+                PROYEK
+              </h2>
+            </div>
+
+            <Link
+              to="/projects"
+              className="group inline-flex w-fit shrink-0 items-center gap-3 text-xs font-medium uppercase tracking-[0.16em] text-white transition-colors hover:text-blue-300"
+            >
+              Semua Proyek
+              <span className="flex h-9 w-9 items-center justify-center rounded-full border border-white/20 transition-all duration-300 group-hover:-rotate-45 group-hover:border-blue-400 group-hover:bg-blue-500/10">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  className="h-4 w-4"
+                >
+                  <path d="M7 17 17 7M7 7h10v10" />
+                </svg>
+              </span>
+            </Link>
+          </div>
+        </Reveal>
+
+        {featured.length > 0 ? (
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            {featured.map((project, index) => (
+              <Reveal key={project.id} delay={Math.min(index * 0.12, 0.36)}>
+                <ProjectHoverSlider project={project} />
+              </Reveal>
+            ))}
+          </div>
+        ) : (
+          <div className="rounded-2xl border border-dashed border-white/10 px-6 py-16 text-center">
+            <Link
+              to="/projects"
+              className="mt-4 inline-flex text-sm text-blue-400 no-underline transition-colors hover:text-blue-300"
+            >
+              Jelajahi halaman proyek →
+            </Link>
+          </div>
+        )}
+      </section>
+    </main>
   );
 }

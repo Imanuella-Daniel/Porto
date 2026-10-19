@@ -1,135 +1,205 @@
-import { timeline } from '../data/experience';
-import type { TimelineType } from '../data/experience';
-import Reveal from '../components/Reveal';
+import { useState } from "react";
+import {
+  workExperience,
+  organizationExperience,
+  certifications,
+  type TimelineItem,
+} from "../data/experience";
+import Reveal from "../components/Reveal";
+import AtmosphericBg from "../components/AtmosphericBg";
 
-const typeConfig: Record<TimelineType, { label: string; icon: string; color: string }> = {
-  education: { label: 'Pendidikan', icon: '🎓', color: '#2dd4bf' },
-  work: { label: 'Pengalaman Kerja', icon: '💼', color: '#818cf8' },
-  organization: { label: 'Organisasi', icon: '👥', color: '#f59e0b' },
-};
+type TabFilter = "all" | "work" | "organization" | "certifications";
+
+const tabs: { id: TabFilter; label: string }[] = [
+  { id: "all", label: "Semua" },
+  { id: "work", label: "Pengalaman Kerja" },
+  { id: "organization", label: "Organisasi" },
+  { id: "certifications", label: "Sertifikasi" },
+];
 
 export default function Experience() {
+  const [activeTab, setActiveTab] = useState<TabFilter>("all");
+
+  const allTimelineItems: (TimelineItem & { key: string })[] = [
+    ...workExperience.map((item, i) => ({ ...item, key: `work-${i}` })),
+    ...organizationExperience.map((item, i) => ({ ...item, key: `org-${i}` })),
+  ];
+
+  const displayedTimeline =
+    activeTab === "all"
+      ? allTimelineItems
+      : activeTab === "certifications"
+        ? []
+        : allTimelineItems.filter((item) => item.type === activeTab);
+
+  const showCertifications =
+    activeTab === "all" || activeTab === "certifications";
+
   return (
-    <div style={{ width: '100%', maxWidth: 1200, margin: '0 auto', padding: '64px 24px 100px' }}>
-
-      {/* Header */}
-      <Reveal delay={0.1}>
-        <div style={{ marginBottom: 56 }}>
-        <div style={{ fontFamily: 'JetBrains Mono, monospace', color: '#2dd4bf', fontSize: 12, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 10 }}>Latar Belakang</div>
-        <h1 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 'clamp(36px, 5vw, 52px)', fontWeight: 800, color: '#e1e8f4', margin: '0 0 14px 0', letterSpacing: '-0.02em', lineHeight: 1.1 }}>
-          Pengalaman
-        </h1>
-        <p style={{ color: '#5e6e86', fontSize: 15, lineHeight: 1.7, maxWidth: 520, margin: '0 0 18px 0' }}>
-          Pengalaman kerja dan perjalanan yang membentuk saya sebagai seorang developer.
-        </p>
-        <div style={{ width: 40, height: 3, background: '#2dd4bf', borderRadius: 2 }} />
-      </div>
-      </Reveal>
-
-      {/* Legend */}
-      <div style={{ display: 'flex', gap: 20, marginBottom: 44, flexWrap: 'wrap' }}>
-        {Object.entries(typeConfig).map(([type, cfg]) => (
-          <div key={type} style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
-            <div style={{ width: 10, height: 10, borderRadius: '50%', background: cfg.color }} />
-            <span style={{ color: '#5e6e86', fontSize: 12 }}>{cfg.label}</span>
-          </div>
-        ))}
-      </div>
-
-      {/* Timeline */}
-      <div style={{ position: 'relative', paddingLeft: 36 }}>
-        {/* Vertical line */}
-        <div style={{ position: 'absolute', left: 12, top: 8, bottom: 40, width: 2, background: 'linear-gradient(to bottom, rgba(45,212,191,0.4) 0%, rgba(35,43,58,0.3) 100%)' }} />
-
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
-          {timeline.filter(item => item.type !== 'education').map((item, i) => {
-            const cfg = typeConfig[item.type];
-            return (
-              <Reveal key={i} delay={0.15 + (i * 0.1)}>
-                <div style={{ position: 'relative' }}>
-                {/* Timeline dot */}
-                <div style={{
-                  position: 'absolute',
-                  left: -30,
-                  top: 18,
-                  width: 14,
-                  height: 14,
-                  borderRadius: '50%',
-                  border: `2px solid ${cfg.color}`,
-                  background: '#0c0e13',
-                  boxShadow: `0 0 10px ${cfg.color}40`,
-                  zIndex: 1,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
-                  <div style={{ width: 6, height: 6, borderRadius: '50%', background: cfg.color }} />
-                </div>
-
-                {/* Card */}
-                <div
-                  style={{
-                    background: '#131720',
-                    border: '1px solid #232b3a',
-                    borderRadius: 12,
-                    overflow: 'hidden',
-                    transition: 'border-color 0.2s',
-                  }}
-                  onMouseEnter={e => (e.currentTarget.style.borderColor = `${cfg.color}50`)}
-                  onMouseLeave={e => (e.currentTarget.style.borderColor = '#232b3a')}
+    <main className="relative isolate min-h-screen w-full overflow-hidden bg-[#05070D] text-white">
+      <AtmosphericBg />
+      <div className="mx-auto max-w-7xl px-5 pb-24 pt-12 sm:px-8 sm:pt-20 lg:px-12 lg:pt-24">
+        <Reveal delay={0.1}>
+          <section className="mb-8 sm:mb-10">
+            <h1 className="text-3xl font-medium tracking-tight text-white sm:text-4xl md:text-5xl">
+              Pengalaman
+              <span className="text-blue-500">.</span>
+            </h1>
+            <p className="mt-2.5 max-w-xl text-sm leading-relaxed text-slate-400 sm:text-base">
+              Rekam jejak kerja, organisasi, dan sertifikasi saya.
+            </p>
+          </section>
+        </Reveal>
+        <Reveal delay={0.16}>
+          <div className="mb-14 flex flex-wrap items-center gap-2 border-t border-white/10 pt-8">
+            {tabs.map((tab) => {
+              const active = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`group relative overflow-hidden rounded-full border px-4 py-2.5 text-xs transition-all duration-300 cursor-pointer ${
+                    active
+                      ? "border-blue-400/70 bg-blue-500/15 text-blue-200 shadow-[0_0_24px_rgba(59,130,246,0.12)]"
+                      : "border-white/10 bg-white/[0.02] text-slate-400 hover:border-blue-400/40 hover:text-slate-200"
+                  }`}
                 >
-                  {/* Card header */}
-                  <div style={{ padding: '18px 22px 16px', borderBottom: '1px solid #232b3a' }}>
-                    <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', marginBottom: 6 }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                        <span style={{ fontSize: 16 }}>{cfg.icon}</span>
-                        <span style={{ fontSize: 10, padding: '2px 8px', borderRadius: 10, background: `${cfg.color}15`, color: cfg.color, fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.05em' }}>
-                          {cfg.label}
+                  {active && <span className="mr-2 text-blue-400">✳</span>}
+                  {tab.label}
+                </button>
+              );
+            })}
+          </div>
+        </Reveal>
+
+        {displayedTimeline.length > 0 && (
+          <div className="relative mb-20">
+            <div
+              aria-hidden="true"
+              className="absolute left-[15px] sm:left-[23px] top-6 bottom-10 w-px bg-gradient-to-b from-blue-500/50 via-white/10 to-transparent"
+            />
+
+            <div className="space-y-8 sm:space-y-10 pl-8 sm:pl-16">
+              {displayedTimeline.map((item, index) => (
+                <Reveal key={item.key} delay={Math.min(0.08 * index, 0.4)}>
+                  <div className="relative group">
+                    <div className="absolute -left-[27px] sm:-left-[53px] top-7 flex h-6 w-6 items-center justify-center">
+                      <span className="h-3 w-3 rounded-full border-2 border-blue-400 bg-blue-500 shadow-[0_0_12px_rgba(59,130,246,0.8)] transition-transform duration-300 group-hover:scale-125" />
+                    </div>
+
+                    <div className="rounded-2xl border border-white/10 bg-white/[0.025] p-6 sm:p-8 backdrop-blur-sm transition-all duration-300 hover:border-blue-400/40 hover:bg-white/[0.035] hover:shadow-[0_0_36px_rgba(59,130,246,0.1)]">
+                      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.08] pb-4 mb-5">
+                        <div className="flex items-center gap-3">
+                          <span className="rounded-full border border-blue-400/30 bg-blue-500/10 px-3 py-1 font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-blue-300">
+                            {item.type === "work"
+                              ? "Pengalaman Kerja"
+                              : "Organisasi"}
+                          </span>
+                          {item.location && (
+                            <span className="text-xs text-slate-500 font-mono hidden sm:inline">
+                              {item.location}
+                            </span>
+                          )}
+                        </div>
+
+                        <span className="font-mono text-xs text-slate-400">
+                          {item.period}
                         </span>
                       </div>
-                      <span style={{ color: '#5e6e86', fontSize: 12, fontFamily: 'JetBrains Mono, monospace', flexShrink: 0 }}>{item.period}</span>
-                    </div>
-                    <h3 style={{ fontFamily: 'Outfit, sans-serif', color: '#e1e8f4', fontSize: 18, fontWeight: 700, margin: '0 0 4px 0' }}>
-                      {item.title}
-                    </h3>
-                    <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
-                      <span style={{ color: cfg.color, fontSize: 13, fontWeight: 500 }}>{item.institution}</span>
-                      {item.location && (
-                        <>
-                          <span style={{ color: '#232b3a' }}>·</span>
-                          <span style={{ color: '#5e6e86', fontSize: 12 }}>{item.location}</span>
-                        </>
+
+                      <h3 className="text-xl font-medium tracking-tight text-white sm:text-2xl">
+                        {item.title}
+                      </h3>
+
+                      <p className="mt-1 font-serif italic text-base text-blue-300/90 sm:text-lg">
+                        {item.institution}
+                      </p>
+
+                      <p className="mt-4 text-sm leading-7 text-slate-400 sm:text-[15px]">
+                        {item.description}
+                      </p>
+
+                      {item.details.length > 0 && (
+                        <ul className="mt-5 space-y-2.5 p-0 list-none">
+                          {item.details.map((detail, dIdx) => (
+                            <li
+                              key={dIdx}
+                              className="flex items-start gap-3 text-xs leading-relaxed text-slate-300 sm:text-sm"
+                            >
+                              <span className="text-blue-400 mt-1 shrink-0">
+                                ✳
+                              </span>
+                              <span>{detail}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+
+                      {item.tech && item.tech.length > 0 && (
+                        <div className="mt-6 flex flex-wrap gap-2 border-t border-white/[0.08] pt-4">
+                          {item.tech.map((t) => (
+                            <span
+                              key={t}
+                              className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 font-mono text-[11px] text-slate-300"
+                            >
+                              {t}
+                            </span>
+                          ))}
+                        </div>
                       )}
                     </div>
                   </div>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        )}
 
-                  {/* Card body */}
-                  <div style={{ padding: '16px 22px 18px' }}>
-                    <p style={{ color: '#8a9ab5', fontSize: 13, lineHeight: 1.72, margin: '0 0 14px 0' }}>{item.description}</p>
-                    <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 6 }}>
-                      {item.details.map((d, j) => (
-                        <li key={j} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 13, color: '#5e6e86', lineHeight: 1.6 }}>
-                          <span style={{ color: cfg.color, flexShrink: 0, marginTop: 1 }}>→</span>
-                          {d}
-                        </li>
-                      ))}
-                    </ul>
-                    {item.tech && (
-                      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 14, paddingTop: 14, borderTop: '1px solid #1a2033' }}>
-                        {item.tech.map(t => (
-                          <span key={t} style={{ fontSize: 10, padding: '2px 8px', borderRadius: 4, background: 'rgba(45,212,191,0.07)', color: '#2dd4bf', border: '1px solid rgba(45,212,191,0.14)', fontFamily: 'JetBrains Mono, monospace' }}>{t}</span>
-                        ))}
-                      </div>
-                    )}
-                    </div>
-                  </div>
+        {showCertifications && (
+          <Reveal delay={0.24}>
+            <section className="border-t border-white/10 pt-16">
+              <div className="mb-10 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+                <div>
+                  <h2 className="m-0 text-3xl font-medium tracking-tight text-white sm:text-4xl">
+                    Sertifikasi Profesional
+                    <span className="text-blue-500">.</span>
+                  </h2>
                 </div>
-              </Reveal>
-            );
-          })}
-        </div>
-      </div>
+                <span className="font-mono text-xs text-slate-500">
+                  01 — 0{certifications.length}
+                </span>
+              </div>
 
-    </div>
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                {certifications.map((cert) => (
+                  <div
+                    key={cert.title}
+                    className="group rounded-2xl border border-white/10 bg-white/[0.025] p-6 sm:p-8 backdrop-blur-sm transition-all duration-300 hover:border-blue-400/40 hover:bg-white/[0.035] hover:shadow-[0_0_32px_rgba(59,130,246,0.12)]"
+                  >
+                    <div className="flex items-center justify-between gap-3 mb-4">
+                      <span className="font-serif italic text-sm text-blue-300">
+                        {cert.issuer}
+                      </span>
+                      <span className="font-mono text-xs text-slate-500">
+                        {cert.year}
+                      </span>
+                    </div>
+
+                    <h3 className="text-lg font-medium tracking-tight text-white group-hover:text-blue-200 transition-colors">
+                      {cert.title}
+                    </h3>
+
+                    <p className="mt-3 text-xs leading-relaxed text-slate-400 font-mono">
+                      Fokus: {cert.skills}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </section>
+          </Reveal>
+        )}
+      </div>
+    </main>
   );
 }
