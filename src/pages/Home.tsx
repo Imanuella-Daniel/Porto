@@ -1,6 +1,7 @@
 import { Link } from 'react-router';
 import { getFeaturedProjects } from '../data/projects';
 import ProjectCard from '../components/ProjectCard';
+import Reveal from '../components/Reveal';
 
 const social = [
   {
@@ -38,306 +39,94 @@ export default function Home() {
   return (
     <div>
       {/* Hero */}
-      <section
-        style={{
-          minHeight: 'calc(100vh - 64px)',
-          display: 'flex',
-          alignItems: 'center',
-          padding: '80px 0',
-          position: 'relative',
-          overflow: 'hidden',
-        }}
-      >
-        <div
-          style={{
-            position: 'absolute',
-            top: '15%',
-            right: '20%',
-            width: 500,
-            height: 500,
-            background: 'radial-gradient(circle, rgba(45,212,191,0.055) 0%, transparent 65%)',
-            pointerEvents: 'none',
-          }}
-        />
+      <section className="min-h-[calc(100vh-64px)] flex items-center py-20 relative overflow-hidden">
+        <div className="absolute top-[15%] right-[20%] w-[500px] h-[500px] bg-[radial-gradient(circle,rgba(45,212,191,0.055)_0%,transparent_65%)] pointer-events-none" />
 
-        <div
-          style={{
-            maxWidth: 1200,
-            margin: '0 auto',
-            padding: '0 24px',
-            width: '100%',
-            display: 'flex',
-            gap: 64,
-            alignItems: 'center',
-            position: 'relative',
-            zIndex: 1,
-          }}
-        >
+        <div className="max-w-[1200px] mx-auto px-6 w-full flex gap-16 items-center relative z-10">
           {/* Text side */}
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 10,
-                marginBottom: 18,
-                fontFamily: 'JetBrains Mono, monospace',
-                color: '#2dd4bf',
-                fontSize: 13,
-              }}
-            >
-              <span style={{ display: 'inline-block', width: 28, height: 1, background: '#2dd4bf' }} />
-              Halo, saya
-            </div>
+          <div className="flex-1 min-w-0">
+            <Reveal delay={0.1}>
+              <div className="flex items-center gap-2.5 mb-4 font-mono text-accent text-[13px]">
+                <span className="inline-block w-7 h-px bg-accent" />
+                Halo, saya
+              </div>
 
-            <h1
-              style={{
-                fontFamily: 'Outfit, sans-serif',
-                fontSize: 'clamp(48px, 7vw, 80px)',
-                fontWeight: 800,
-                color: '#e1e8f4',
-                margin: '0 0 6px 0',
-                lineHeight: 1.04,
-                letterSpacing: '-0.025em',
-              }}
-            >
-              Imanuella Daniel
-            </h1>
+              <h1 className="font-display text-[clamp(48px,7vw,80px)] font-extrabold text-fg m-0 mb-1.5 leading-[1.04] tracking-[-0.025em]">
+                Imanuella Daniel
+              </h1>
 
-            <div
-              style={{
-                fontFamily: 'Outfit, sans-serif',
-                fontSize: 'clamp(18px, 2.5vw, 24px)',
-                color: '#2dd4bf',
-                fontWeight: 600,
-                marginBottom: 22,
-              }}
-            >
-              IT Graduate · Software Developer
-            </div>
+              <div className="font-display text-[clamp(18px,2.5vw,24px)] text-accent font-semibold mb-5">
+                IT Graduate · Software Developer
+              </div>
 
-            <p style={{ fontSize: 16, color: '#5e6e86', lineHeight: 1.72, maxWidth: 460, margin: '0 0 34px 0' }}>
-              Lulusan S1 Informatika yang antusias dalam membangun solusi digital yang bermanfaat, andal, dan mudah digunakan. Terbuka untuk posisi entry-level dan junior di bidang pengembangan web dan perangkat lunak.
-            </p>
+              <p className="text-base text-muted leading-relaxed max-w-[460px] m-0 mb-8">
+                Lulusan S1 Informatika yang antusias dalam membangun solusi digital yang bermanfaat, andal, dan mudah digunakan. Terbuka untuk posisi entry-level dan junior di bidang pengembangan web dan perangkat lunak.
+              </p>
 
-            <div style={{ display: 'flex', gap: 12, marginBottom: 32, flexWrap: 'wrap' }}>
-              <Link
-                to="/projects"
-                style={{
-                  padding: '12px 26px',
-                  background: '#2dd4bf',
-                  color: '#0c0e13',
-                  borderRadius: 8,
-                  fontWeight: 700,
-                  fontSize: 14,
-                  textDecoration: 'none',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: 8,
-                  transition: 'opacity 0.15s',
-                }}
-                onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
-                onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
-              >
-                Lihat Proyek Saya
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
-              </Link>
-              <a
-                href="/src/assets/CV_Imanuella Daniel.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  padding: '12px 26px',
-                  background: 'transparent',
-                  color: '#e1e8f4',
-                  borderRadius: 8,
-                  fontWeight: 600,
-                  fontSize: 14,
-                  textDecoration: 'none',
-                  border: '1px solid #232b3a',
-                  transition: 'border-color 0.15s',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: 8,
-                }}
-                onMouseEnter={e => { e.currentTarget.style.borderColor = '#2dd4bf'; e.currentTarget.style.color = '#2dd4bf'; }}
-                onMouseLeave={e => { e.currentTarget.style.borderColor = '#232b3a'; e.currentTarget.style.color = '#e1e8f4'; }}
-              >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                Lihat CV
-              </a>
-            </div>
-
-            <div style={{ display: 'flex', gap: 14, alignItems: 'center' }}>
-              {social.map(s => (
-                <a
-                  key={s.label}
-                  href={s.href}
-                  aria-label={s.label}
-                  title={s.label}
-                  style={{ color: '#5e6e86', textDecoration: 'none', transition: 'color 0.15s' }}
-                  onMouseEnter={e => (e.currentTarget.style.color = '#2dd4bf')}
-                  onMouseLeave={e => (e.currentTarget.style.color = '#5e6e86')}
+              <div className="flex gap-3 mb-8 flex-wrap">
+                <Link
+                  to="/projects"
+                  className="px-6 py-3 bg-accent text-bg rounded-lg font-bold text-sm no-underline inline-flex items-center gap-2 transition-all duration-300 hover:shadow-[0_4px_20px_rgba(45,212,191,0.25)] hover:-translate-y-1 hover:opacity-100"
                 >
-                  {s.icon}
+                  Lihat Proyek Saya
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+                </Link>
+                <a
+                  href="/src/assets/CV_Imanuella Daniel.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-6 py-3 bg-transparent text-fg rounded-lg font-semibold text-sm no-underline border border-border transition-all duration-300 hover:border-accent hover:text-accent hover:-translate-y-1 inline-flex items-center gap-2"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                  Lihat CV
                 </a>
-              ))}
-            </div>
+              </div>
+
+              <div className="flex gap-3.5 items-center">
+                {social.map(s => (
+                  <a
+                    key={s.label}
+                    href={s.href}
+                    aria-label={s.label}
+                    title={s.label}
+                    className="text-muted no-underline transition-all duration-300 hover:text-accent hover:-translate-y-1"
+                  >
+                    {s.icon}
+                  </a>
+                ))}
+              </div>
+            </Reveal>
           </div>
 
           {/* Avatar side */}
-          <div className="hidden md:flex" style={{ flexShrink: 0, justifyContent: 'center' }}>
-            <div style={{ position: 'relative' }}>
-              <div
-                style={{
-                  position: 'absolute',
-                  inset: -1,
-                  borderRadius: 20,
-                  background: 'linear-gradient(135deg, rgba(45,212,191,0.3), transparent 60%)',
-                  zIndex: 0,
-                }}
-              />
-              <div
-                style={{
-                  width: 300,
-                  height: 380,
-                  background: 'linear-gradient(145deg, #1a2033 0%, #131720 100%)',
-                  borderRadius: 18,
-                  border: '1px solid rgba(45,212,191,0.2)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  position: 'relative',
-                  overflow: 'hidden',
-                  zIndex: 1,
-                }}
-              >
-                <div style={{ position: 'absolute', top: -60, right: -60, width: 180, height: 180, borderRadius: '50%', border: '1px solid rgba(45,212,191,0.08)', background: 'radial-gradient(circle, rgba(45,212,191,0.04) 0%, transparent 70%)' }} />
-                <div style={{ position: 'absolute', bottom: -40, left: -40, width: 140, height: 140, borderRadius: '50%', border: '1px solid rgba(45,212,191,0.06)' }} />
-                <div
-                  style={{
-                    width: 110,
-                    height: 110,
-                    borderRadius: '50%',
-                    background: 'linear-gradient(135deg, #2dd4bf 0%, #0d9488 100%)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontFamily: 'Outfit, sans-serif',
-                    fontWeight: 800,
-                    fontSize: 42,
-                    color: '#0c0e13',
-                    marginBottom: 20,
-                    position: 'relative',
-                    zIndex: 2,
-                  }}
-                >
-                  ID
-                </div>
-                <div style={{ textAlign: 'center', position: 'relative', zIndex: 2 }}>
-                  <div style={{ fontFamily: 'Outfit, sans-serif', color: '#e1e8f4', fontWeight: 700, fontSize: 20, marginBottom: 4 }}>Imanuella Daniel</div>
-                  <div style={{ color: '#2dd4bf', fontSize: 12, fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.06em' }}>IT Graduate · Software Developer</div>
-                  <div style={{ color: '#5e6e86', fontSize: 11, marginTop: 6 }}>Yogyakarta, Indonesia</div>
-                  <div style={{ display: 'flex', gap: 6, justifyContent: 'center', marginTop: 16, flexWrap: 'wrap', padding: '0 16px' }}>
-                    {['PHP', 'Laravel', 'Flutter', 'MySQL'].map(t => (
-                      <span key={t} style={{ fontSize: 10, padding: '2px 8px', borderRadius: 4, background: 'rgba(45,212,191,0.1)', color: '#2dd4bf', border: '1px solid rgba(45,212,191,0.15)', fontFamily: 'JetBrains Mono, monospace' }}>{t}</span>
-                    ))}
+          <div className="hidden md:flex shrink-0 justify-center">
+            <Reveal delay={0.2}>
+              <div className="relative group">
+                <div className="absolute -inset-px rounded-[20px] bg-gradient-to-br from-accent/30 to-transparent z-0 opacity-50 transition-opacity duration-500 group-hover:opacity-100" />
+                <div className="w-[300px] h-[380px] bg-gradient-to-br from-[#1a2033] to-[#131720] rounded-[18px] border border-accent/20 flex flex-col items-center justify-center relative overflow-hidden z-10 transition-transform duration-500 group-hover:-translate-y-2">
+                  <div className="absolute -top-[60px] -right-[60px] w-[180px] h-[180px] rounded-full border border-accent/[0.08] bg-[radial-gradient(circle,rgba(45,212,191,0.04)_0%,transparent_70%)]" />
+                  <div className="absolute -bottom-[40px] -left-[40px] w-[140px] h-[140px] rounded-full border border-accent/[0.06]" />
+                  <div className="w-[110px] h-[110px] rounded-full bg-gradient-to-br from-accent to-[#0d9488] flex items-center justify-center font-display font-extrabold text-[42px] text-bg mb-5 relative z-20">
+                    ID
+                  </div>
+                  <div className="text-center relative z-20">
+                    <div className="font-display text-fg font-bold text-xl mb-1">Imanuella Daniel</div>
+                    <div className="text-accent text-xs font-mono tracking-wider">IT Graduate · Software Developer</div>
+                    <div className="text-muted text-[11px] mt-1.5">Yogyakarta, Indonesia</div>
+                    <div className="flex gap-1.5 justify-center mt-4 flex-wrap px-4">
+                      {['PHP', 'Laravel', 'Flutter', 'MySQL'].map(t => (
+                        <span key={t} className="text-[10px] px-2 py-0.5 rounded bg-accent/10 text-accent border border-accent/15 font-mono">{t}</span>
+                      ))}
+                    </div>
                   </div>
                 </div>
+                
               </div>
-              {/* Floating status badge */}
-              <div style={{
-                position: 'absolute',
-                bottom: -16,
-                right: -16,
-                background: '#1a2033',
-                border: '1px solid rgba(45,212,191,0.25)',
-                borderRadius: 10,
-                padding: '8px 14px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 7,
-                zIndex: 3,
-              }}>
-                <div style={{ width: 7, height: 7, borderRadius: '50%', background: '#2dd4bf', boxShadow: '0 0 8px rgba(45,212,191,0.6)' }} />
-                <span style={{ color: '#e1e8f4', fontSize: 11, fontWeight: 600 }}>Terbuka untuk Peluang</span>
-              </div>
-            </div>
+            </Reveal>
           </div>
         </div>
       </section>
 
-      {/* Selected Work */}
-      <section style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px 80px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 40, paddingTop: 16 }}>
-          <div>
-            <div style={{ fontFamily: 'JetBrains Mono, monospace', color: '#2dd4bf', fontSize: 12, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 8 }}>Karya Pilihan</div>
-            <h2 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 36, fontWeight: 700, color: '#e1e8f4', margin: 0 }}>
-              Proyek Unggulan
-            </h2>
-          </div>
-          <Link
-            to="/projects"
-            style={{ color: '#2dd4bf', textDecoration: 'none', fontSize: 13, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 5, flexShrink: 0 }}
-          >
-            Lihat Semua
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
-          </Link>
-        </div>
-
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 24 }}>
-          {featured.map(project => (
-            <ProjectCard key={project.id} project={project} />
-          ))}
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px 100px' }}>
-        <div
-          style={{
-            background: 'linear-gradient(135deg, #131720 0%, #0d3d38 100%)',
-            border: '1px solid rgba(45,212,191,0.2)',
-            borderRadius: 16,
-            padding: '56px 48px',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            textAlign: 'center',
-            position: 'relative',
-            overflow: 'hidden',
-          }}
-        >
-          <div style={{ position: 'absolute', top: -80, right: -80, width: 240, height: 240, borderRadius: '50%', background: 'radial-gradient(circle, rgba(45,212,191,0.07) 0%, transparent 70%)' }} />
-          <div style={{ fontFamily: 'JetBrains Mono, monospace', color: '#2dd4bf', fontSize: 12, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 14 }}>Ayo bekerja sama</div>
-          <h2 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 36, fontWeight: 700, color: '#e1e8f4', margin: '0 0 14px 0' }}>
-            Saya Terbuka untuk Peluang
-          </h2>
-          <p style={{ color: '#5e6e86', fontSize: 15, lineHeight: 1.7, maxWidth: 480, margin: '0 0 32px 0' }}>
-            Sedang mencari posisi IT entry-level, pengembangan perangkat lunak, dan junior developer.
-          </p>
-          <Link
-            to="/contact"
-            style={{
-              padding: '13px 28px',
-              background: '#2dd4bf',
-              color: '#0c0e13',
-              borderRadius: 8,
-              fontWeight: 700,
-              fontSize: 14,
-              textDecoration: 'none',
-              transition: 'opacity 0.15s',
-              position: 'relative',
-              zIndex: 1,
-            }}
-            onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
-            onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
-          >
-            Hubungi Saya
-          </Link>
-        </div>
-      </section>
     </div>
   );
 }

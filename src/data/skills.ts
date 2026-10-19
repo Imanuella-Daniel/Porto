@@ -1,6 +1,6 @@
 export interface Skill {
   name: string;
-  level: 'primary' | 'secondary';
+  tag?: string;
 }
 
 export interface SkillCategory {
@@ -14,56 +14,48 @@ export const skillCategories: SkillCategory[] = [
     category: 'Programming Languages',
     icon: '{ }',
     skills: [
-      { name: 'PHP', level: 'primary' },
-      { name: 'JavaScript', level: 'primary' },
-      { name: 'Java', level: 'primary' },
-      { name: 'Python', level: 'secondary' },
-      { name: 'Dart', level: 'secondary' },
-      { name: 'SQL', level: 'primary' },
+      { name: 'PHP', tag: 'Backend' },
+      { name: 'JavaScript', tag: 'Fullstack' },
+      { name: 'TypeScript', tag: 'Modern Web' },
+      { name: 'Java', tag: 'OOP / Android' },
+      { name: 'Python', tag: 'Scripting / Data' },
+      { name: 'Dart', tag: 'Mobile' },
+      { name: 'C / C++', tag: 'Fundamentals' },
+      { name: 'HTML5', tag: 'Markup' },
+      { name: 'CSS3', tag: 'Styling' },
+      { name: 'SQL', tag: 'Database Query' },
     ],
   },
   {
-    category: 'Frameworks & Libraries',
+    category: 'Frameworks and Libraries',
     icon: '⬡',
     skills: [
-      { name: 'Laravel', level: 'primary' },
-      { name: 'Flutter', level: 'primary' },
-      { name: 'Bootstrap', level: 'primary' },
-      { name: 'Tailwind CSS', level: 'primary' },
-      { name: 'Filament PHP', level: 'secondary' },
-      { name: 'REST API', level: 'primary' },
+      { name: 'React', tag: 'Frontend Library' },
+      { name: 'Laravel', tag: 'PHP Framework' },
+      { name: 'Flutter', tag: 'Mobile SDK' },
+      { name: 'Node.js', tag: 'JS Runtime' },
+      { name: 'Tailwind CSS', tag: 'Utility-first CSS' },
+      { name: 'Bootstrap', tag: 'CSS Framework' },
+      { name: 'Vite', tag: 'Build Tool' },
+      { name: 'Filament PHP', tag: 'Admin Panel' },
+      { name: 'MySQL', tag: 'Relational DB' },
+      { name: 'PostgreSQL', tag: 'Relational DB' },
+      { name: 'REST API', tag: 'API Architecture' },
     ],
   },
   {
-    category: 'Database',
-    icon: '◫',
-    skills: [
-      { name: 'MySQL', level: 'primary' },
-      { name: 'PostgreSQL', level: 'secondary' },
-      { name: 'SQL', level: 'primary' },
-    ],
-  },
-  {
-    category: 'Tools & Technologies',
+    category: 'Tools & Platforms',
     icon: '⚙',
     skills: [
-      { name: 'GitHub', level: 'primary' },
-      { name: 'Postman', level: 'primary' },
-      { name: 'Docker', level: 'secondary' },
-      { name: 'Railway', level: 'secondary' },
-      { name: 'Figma', level: 'primary' },
-      { name: 'Blender', level: 'secondary' },
-      { name: 'Canva', level: 'secondary' },
-    ],
-  },
-  {
-    category: 'Other Skills',
-    icon: '◈',
-    skills: [
-      { name: 'Problem Solving', level: 'primary' },
-      { name: 'Teamwork', level: 'primary' },
-      { name: 'Adaptability', level: 'primary' },
-      { name: 'REST API', level: 'primary' },
+      { name: 'Git', tag: 'Version Control' },
+      { name: 'GitHub', tag: 'Code Hosting' },
+      { name: 'Postman', tag: 'API Testing' },
+      { name: 'Docker', tag: 'Containerization' },
+      { name: 'VS Code', tag: 'Code Editor' },
+      { name: 'Railway', tag: 'Deployment' },
+      { name: 'Figma', tag: 'UI/UX Design' },
+      { name: 'Blender', tag: '3D Modeling' },
+      { name: 'Canva', tag: 'Graphic Design' },
     ],
   },
 ];

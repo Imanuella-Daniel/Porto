@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useParams, Link } from 'react-router';
 import { getProject } from '../data/projects';
-import MockScreenshot from '../components/MockScreenshot';
+import ProjectImage from '../components/ProjectImage';
 
 export default function ProjectDetail() {
   const { id } = useParams<{ id: string }>();
@@ -21,7 +21,7 @@ export default function ProjectDetail() {
   const current = project.screenshots[activeScreenshot];
 
   return (
-    <div style={{ maxWidth: 1200, margin: '0 auto', padding: '48px 24px 100px' }}>
+    <div style={{ width: '100%', maxWidth: 1200, margin: '0 auto', padding: '48px 24px 100px' }}>
 
       {/* Back nav */}
       <Link
@@ -74,8 +74,8 @@ export default function ProjectDetail() {
         <div>
           {/* Main screenshot */}
           <div style={{ marginBottom: 12 }}>
-            <div style={{ height: 420, borderRadius: 12, overflow: 'hidden', border: '1px solid #232b3a' }}>
-              <MockScreenshot type={current.type} />
+            <div style={{ height: 420, borderRadius: 12, overflow: 'hidden', border: '1px solid #232b3a', background: '#0a0d14', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <ProjectImage src={current.src} alt={`${project.title} — ${current.label}`} fit="contain" />
             </div>
             <div style={{ marginTop: 8, display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: 4 }}>
               <span style={{ color: '#5e6e86', fontSize: 12, fontFamily: 'JetBrains Mono, monospace' }}>{current.label}</span>
@@ -102,7 +102,7 @@ export default function ProjectDetail() {
                   onMouseEnter={e => { if (i !== activeScreenshot) e.currentTarget.style.borderColor = '#5e6e86'; }}
                   onMouseLeave={e => { if (i !== activeScreenshot) e.currentTarget.style.borderColor = '#232b3a'; }}
                 >
-                  <MockScreenshot type={s.type} />
+                  <ProjectImage src={s.src} alt={`${project.title} — ${s.label}`} />
                 </div>
               ))}
             </div>

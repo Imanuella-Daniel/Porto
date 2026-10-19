@@ -1,27 +1,30 @@
 import { timeline } from '../data/experience';
 import type { TimelineType } from '../data/experience';
+import Reveal from '../components/Reveal';
 
 const typeConfig: Record<TimelineType, { label: string; icon: string; color: string }> = {
   education: { label: 'Pendidikan', icon: '🎓', color: '#2dd4bf' },
   work: { label: 'Pengalaman Kerja', icon: '💼', color: '#818cf8' },
-  project: { label: 'Proyek', icon: '⚡', color: '#f59e0b' },
+  organization: { label: 'Organisasi', icon: '👥', color: '#f59e0b' },
 };
 
 export default function Experience() {
   return (
-    <div style={{ maxWidth: 1200, margin: '0 auto', padding: '64px 24px 100px' }}>
+    <div style={{ width: '100%', maxWidth: 1200, margin: '0 auto', padding: '64px 24px 100px' }}>
 
       {/* Header */}
-      <div style={{ marginBottom: 56 }}>
+      <Reveal delay={0.1}>
+        <div style={{ marginBottom: 56 }}>
         <div style={{ fontFamily: 'JetBrains Mono, monospace', color: '#2dd4bf', fontSize: 12, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 10 }}>Latar Belakang</div>
         <h1 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 'clamp(36px, 5vw, 52px)', fontWeight: 800, color: '#e1e8f4', margin: '0 0 14px 0', letterSpacing: '-0.02em', lineHeight: 1.1 }}>
-          Pengalaman & Pendidikan
+          Pengalaman
         </h1>
         <p style={{ color: '#5e6e86', fontSize: 15, lineHeight: 1.7, maxWidth: 520, margin: '0 0 18px 0' }}>
-          Riwayat pendidikan, pengalaman kerja, dan perjalanan yang membentuk saya sebagai seorang developer.
+          Pengalaman kerja dan perjalanan yang membentuk saya sebagai seorang developer.
         </p>
         <div style={{ width: 40, height: 3, background: '#2dd4bf', borderRadius: 2 }} />
       </div>
+      </Reveal>
 
       {/* Legend */}
       <div style={{ display: 'flex', gap: 20, marginBottom: 44, flexWrap: 'wrap' }}>
@@ -39,10 +42,11 @@ export default function Experience() {
         <div style={{ position: 'absolute', left: 12, top: 8, bottom: 40, width: 2, background: 'linear-gradient(to bottom, rgba(45,212,191,0.4) 0%, rgba(35,43,58,0.3) 100%)' }} />
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
-          {timeline.map((item, i) => {
+          {timeline.filter(item => item.type !== 'education').map((item, i) => {
             const cfg = typeConfig[item.type];
             return (
-              <div key={i} style={{ position: 'relative' }}>
+              <Reveal key={i} delay={0.15 + (i * 0.1)}>
+                <div style={{ position: 'relative' }}>
                 {/* Timeline dot */}
                 <div style={{
                   position: 'absolute',
@@ -117,9 +121,10 @@ export default function Experience() {
                         ))}
                       </div>
                     )}
+                    </div>
                   </div>
                 </div>
-              </div>
+              </Reveal>
             );
           })}
         </div>

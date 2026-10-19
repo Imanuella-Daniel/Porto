@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Reveal from '../components/Reveal';
 
 const contactInfo = [
   {
@@ -94,161 +95,153 @@ export default function Contact() {
   };
 
   return (
-    <div style={{ maxWidth: 1200, margin: '0 auto', padding: '64px 24px 100px' }}>
+    <div style={{ width: '100%', maxWidth: 1200, margin: '0 auto', padding: '64px 24px 100px' }}>
 
       {/* Header */}
-      <div style={{ marginBottom: 56 }}>
-        <div style={{ fontFamily: 'JetBrains Mono, monospace', color: '#2dd4bf', fontSize: 12, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 10 }}>Kontak</div>
-        <h1 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 'clamp(36px, 5vw, 52px)', fontWeight: 800, color: '#e1e8f4', margin: '0 0 14px 0', letterSpacing: '-0.02em', lineHeight: 1.1 }}>
-          Ayo Terhubung
-        </h1>
-
-        <div style={{ width: 40, height: 3, background: '#2dd4bf', borderRadius: 2 }} />
-      </div>
-      <div className="contact-grid" style={{ gridTemplateColumns: '1fr 1.4fr', gap: 48, alignItems: 'stretch' }}>
-        {/* Left: Contact info */}
-        <div>
-          <h2 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 20, fontWeight: 700, color: '#e1e8f4', margin: '0 0 20px 0' }}>Informasi Kontak</h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 32 }}>
-            {contactInfo.map(item => (
-              <a
-                key={item.label}
-                href={item.href}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 14,
-                  padding: '14px 16px',
-                  background: '#131720',
-                  border: '1px solid #232b3a',
-                  borderRadius: 10,
-                  textDecoration: 'none',
-                  transition: 'border-color 0.2s, background 0.2s',
-                }}
-                onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(45,212,191,0.35)'; e.currentTarget.style.background = 'rgba(45,212,191,0.03)'; }}
-                onMouseLeave={e => { e.currentTarget.style.borderColor = '#232b3a'; e.currentTarget.style.background = '#131720'; }}
-              >
-                <div style={{ color: '#2dd4bf', width: 20, flexShrink: 0 }}>{item.icon}</div>
-                <div>
-                  <div style={{ color: '#5e6e86', fontSize: 11, marginBottom: 2 }}>{item.label}</div>
-                  <div style={{ color: '#e1e8f4', fontSize: 13, fontWeight: 500 }}>{item.value}</div>
-                </div>
-              </a>
-            ))}
-          </div>
-
-          {/* CV section */}
-          <div style={{ background: 'linear-gradient(135deg, #0d3d38 0%, #131720 100%)', border: '1px solid rgba(45,212,191,0.2)', borderRadius: 12, padding: '22px 20px' }}>
-            <div style={{ fontFamily: 'Outfit, sans-serif', color: '#e1e8f4', fontWeight: 700, fontSize: 16, marginBottom: 8 }}>Lihat &amp; Unduh CV Saya</div>
-            <p style={{ color: '#5e6e86', fontSize: 13, lineHeight: 1.6, margin: '0 0 16px 0' }}>Lihat CV saya untuk mengetahui pengalaman, pendidikan, keterampilan, dan proyek yang pernah saya kerjakan.</p>
-            <a
-              href="/src/assets/CV_Imanuella Daniel.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: 'inline-flex', alignItems: 'center', gap: 8,
-                padding: '10px 20px', background: '#2dd4bf', color: '#0c0e13',
-                borderRadius: 7, fontWeight: 700, fontSize: 13, textDecoration: 'none',
-                transition: 'opacity 0.15s',
-              }}
-              onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
-              onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
-            >
-              Lihat CV →
-            </a>
-          </div>
+      <Reveal delay={0.1}>
+        <div style={{ marginBottom: 48 }}>
+          <div style={{ fontFamily: 'JetBrains Mono, monospace', color: '#2dd4bf', fontSize: 12, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 10 }}>Kontak</div>
+          <h1 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 'clamp(36px, 5vw, 52px)', fontWeight: 800, color: '#e1e8f4', margin: '0 0 14px 0', letterSpacing: '-0.02em', lineHeight: 1.1 }}>
+            Ayo Terhubung
+          </h1>
+          <p style={{ color: '#5e6e86', fontSize: 15, lineHeight: 1.7, maxWidth: 520, margin: '0 0 18px 0' }}>
+            Ada pertanyaan, peluang kerja, atau ingin berdiskusi mengenai proyek? Silakan kirim pesan atau hubungi saya secara langsung.
+          </p>
+          <div style={{ width: 40, height: 3, background: '#2dd4bf', borderRadius: 2 }} />
         </div>
+      </Reveal>
+
+      {/* Main Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.4fr] gap-12 items-start">
+        {/* Left: Contact info */}
+        <Reveal delay={0.2}>
+          <div>
+            <h2 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 20, fontWeight: 700, color: '#e1e8f4', margin: '0 0 20px 0' }}>Informasi Kontak</h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 32 }}>
+              {contactInfo.map(item => (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 14,
+                    padding: '14px 16px',
+                    background: '#131720',
+                    border: '1px solid #232b3a',
+                    borderRadius: 10,
+                    textDecoration: 'none',
+                    transition: 'border-color 0.2s, background 0.2s, transform 0.2s',
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(45,212,191,0.35)'; e.currentTarget.style.background = 'rgba(45,212,191,0.03)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = '#232b3a'; e.currentTarget.style.background = '#131720'; e.currentTarget.style.transform = 'translateY(0)'; }}
+                >
+                  <div style={{ color: '#2dd4bf', width: 20, flexShrink: 0 }}>{item.icon}</div>
+                  <div>
+                    <div style={{ color: '#5e6e86', fontSize: 11, marginBottom: 2 }}>{item.label}</div>
+                    <div style={{ color: '#e1e8f4', fontSize: 13, fontWeight: 500 }}>{item.value}</div>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+        </Reveal>
 
         {/* Right: Contact form */}
-        <div style={{ height: '100%' }}>
-          <div style={{ background: '#131720', border: '1px solid #232b3a', borderRadius: 12, padding: '32px 28px', height: '100%', boxSizing: 'border-box' }}>
-            <h2 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 20, fontWeight: 700, color: '#e1e8f4', margin: '0 0 22px 0' }}>Kirim Pesan</h2>
+        <Reveal delay={0.3}>
+          <div style={{ height: '100%' }}>
+            <div style={{ background: '#131720', border: '1px solid #232b3a', borderRadius: 12, padding: '32px 28px', height: '100%', boxSizing: 'border-box' }}>
+              <h2 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 20, fontWeight: 700, color: '#e1e8f4', margin: '0 0 22px 0' }}>Kirim Pesan</h2>
 
-            {sent ? (
-              <div style={{ textAlign: 'center', padding: '40px 20px' }}>
-                <div style={{ fontSize: 40, marginBottom: 16 }}>✉️</div>
-                <div style={{ fontFamily: 'Outfit, sans-serif', color: '#e1e8f4', fontSize: 20, fontWeight: 700, marginBottom: 8 }}>Pesan Terkirim!</div>
-                <p style={{ color: '#5e6e86', fontSize: 14, lineHeight: 1.6, margin: '0 0 20px 0' }}>Terima kasih sudah menghubungi saya. Saya akan membalas dalam 1–2 hari kerja.</p>
-                <button
-                  onClick={() => { setSent(false); setForm({ name: '', email: '', message: '' }); }}
-                  style={{ background: 'rgba(45,212,191,0.1)', border: '1px solid rgba(45,212,191,0.25)', color: '#2dd4bf', borderRadius: 7, padding: '8px 18px', fontSize: 13, cursor: 'pointer', fontFamily: 'Inter, sans-serif' }}
-                >
-                  Kirim Pesan Lagi
-                </button>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-                  <div>
-                    <label style={{ display: 'block', color: '#8a9ab5', fontSize: 12, marginBottom: 6, fontWeight: 500 }}>Nama Anda</label>
-                    <input
-                      required
-                      type="text"
-                      placeholder="Nama lengkap"
-                      value={form.name}
-                      onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
-                      style={inputStyle}
-                      onFocus={e => (e.target.style.borderColor = 'rgba(45,212,191,0.5)')}
-                      onBlur={e => (e.target.style.borderColor = '#232b3a')}
-                    />
-                  </div>
-                  <div>
-                    <label style={{ display: 'block', color: '#8a9ab5', fontSize: 12, marginBottom: 6, fontWeight: 500 }}>Alamat Email</label>
-                    <input
-                      required
-                      type="email"
-                      placeholder="email@perusahaan.com"
-                      value={form.email}
-                      onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
-                      style={inputStyle}
-                      onFocus={e => (e.target.style.borderColor = 'rgba(45,212,191,0.5)')}
-                      onBlur={e => (e.target.style.borderColor = '#232b3a')}
-                    />
-                  </div>
-                  <div>
-                    <label style={{ display: 'block', color: '#8a9ab5', fontSize: 12, marginBottom: 6, fontWeight: 500 }}>Pesan</label>
-                    <textarea
-                      required
-                      placeholder="Ceritakan tentang kesempatan atau proyek yang ingin Anda diskusikan..."
-                      value={form.message}
-                      onChange={e => setForm(f => ({ ...f, message: e.target.value }))}
-                      rows={5}
-                      style={{ ...inputStyle, resize: 'vertical', minHeight: 120 }}
-                      onFocus={e => (e.target.style.borderColor = 'rgba(45,212,191,0.5)')}
-                      onBlur={e => (e.target.style.borderColor = '#232b3a')}
-                    />
-                  </div>
+              {sent ? (
+                <div style={{ textAlign: 'center', padding: '40px 20px' }}>
+                  <div style={{ fontSize: 40, marginBottom: 16 }}>✉️</div>
+                  <div style={{ fontFamily: 'Outfit, sans-serif', color: '#e1e8f4', fontSize: 20, fontWeight: 700, marginBottom: 8 }}>Pesan Terkirim!</div>
+                  <p style={{ color: '#5e6e86', fontSize: 14, lineHeight: 1.6, margin: '0 0 20px 0' }}>Terima kasih sudah menghubungi saya. Saya akan membalas dalam 1–2 hari kerja.</p>
                   <button
-                    type="submit"
-                    disabled={submitting}
-                    style={{
-                      padding: '12px 24px',
-                      background: submitting ? '#115e59' : '#2dd4bf',
-                      color: submitting ? '#8a9ab5' : '#0c0e13',
-                      borderRadius: 8,
-                      fontWeight: 700,
-                      fontSize: 14,
-                      border: 'none',
-                      cursor: submitting ? 'not-allowed' : 'pointer',
-                      transition: 'opacity 0.15s, background 0.2s',
-                      fontFamily: 'Inter, sans-serif',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: 8,
-                    }}
-                    onMouseEnter={e => { if(!submitting) e.currentTarget.style.opacity = '0.85' }}
-                    onMouseLeave={e => { if(!submitting) e.currentTarget.style.opacity = '1' }}
+                    onClick={() => { setSent(false); setForm({ name: '', email: '', message: '' }); }}
+                    style={{ background: 'rgba(45,212,191,0.1)', border: '1px solid rgba(45,212,191,0.25)', color: '#2dd4bf', borderRadius: 7, padding: '8px 18px', fontSize: 13, cursor: 'pointer', fontFamily: 'Inter, sans-serif' }}
                   >
-                    {submitting ? 'Mengirim...' : 'Kirim Pesan'}
-                    {!submitting && <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>}
+                    Kirim Pesan Lagi
                   </button>
                 </div>
-              </form>
-            )}
+              ) : (
+                <form onSubmit={handleSubmit}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                    <div>
+                      <label style={{ display: 'block', color: '#8a9ab5', fontSize: 12, marginBottom: 6, fontWeight: 500 }}>Nama Anda</label>
+                      <input
+                        required
+                        type="text"
+                        placeholder="Nama lengkap"
+                        value={form.name}
+                        onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
+                        style={inputStyle}
+                        onFocus={e => (e.target.style.borderColor = 'rgba(45,212,191,0.5)')}
+                        onBlur={e => (e.target.style.borderColor = '#232b3a')}
+                      />
+                    </div>
+                    <div>
+                      <label style={{ display: 'block', color: '#8a9ab5', fontSize: 12, marginBottom: 6, fontWeight: 500 }}>Alamat Email</label>
+                      <input
+                        required
+                        type="email"
+                        placeholder="email@perusahaan.com"
+                        value={form.email}
+                        onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
+                        style={inputStyle}
+                        onFocus={e => (e.target.style.borderColor = 'rgba(45,212,191,0.5)')}
+                        onBlur={e => (e.target.style.borderColor = '#232b3a')}
+                      />
+                    </div>
+                    <div>
+                      <label style={{ display: 'block', color: '#8a9ab5', fontSize: 12, marginBottom: 6, fontWeight: 500 }}>Pesan</label>
+                      <textarea
+                        required
+                        placeholder="Ceritakan tentang kesempatan atau proyek yang ingin Anda diskusikan..."
+                        value={form.message}
+                        onChange={e => setForm(f => ({ ...f, message: e.target.value }))}
+                        rows={5}
+                        style={{ ...inputStyle, resize: 'vertical', minHeight: 120 }}
+                        onFocus={e => (e.target.style.borderColor = 'rgba(45,212,191,0.5)')}
+                        onBlur={e => (e.target.style.borderColor = '#232b3a')}
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      disabled={submitting}
+                      style={{
+                        padding: '12px 24px',
+                        background: submitting ? '#115e59' : '#2dd4bf',
+                        color: submitting ? '#8a9ab5' : '#0c0e13',
+                        borderRadius: 8,
+                        fontWeight: 700,
+                        fontSize: 14,
+                        border: 'none',
+                        cursor: submitting ? 'not-allowed' : 'pointer',
+                        transition: 'opacity 0.15s, background 0.2s',
+                        fontFamily: 'Inter, sans-serif',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: 8,
+                      }}
+                      onMouseEnter={e => { if(!submitting) e.currentTarget.style.opacity = '0.85' }}
+                      onMouseLeave={e => { if(!submitting) e.currentTarget.style.opacity = '1' }}
+                    >
+                      {submitting ? 'Mengirim...' : 'Kirim Pesan'}
+                      {!submitting && <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>}
+                    </button>
+                  </div>
+                </form>
+              )}
+            </div>
           </div>
-        </div>
+        </Reveal>
       </div>
     </div>
   );
 }
+

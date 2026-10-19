@@ -1,4 +1,4 @@
-export type TimelineType = 'education' | 'work' | 'project';
+export type TimelineType = 'work' | 'education' | 'organization';
 
 export interface TimelineItem {
   type: TimelineType;
@@ -11,21 +11,14 @@ export interface TimelineItem {
   tech?: string[];
 }
 
-export const timeline: TimelineItem[] = [
-  {
-    type: 'education',
-    title: 'Sarjana Informatika (S.Kom.)',
-    institution: 'Universitas Atma Jaya Yogyakarta',
-    location: 'Yogyakarta, Indonesia',
-    period: 'Agustus 2022 – Agustus 2026',
-    description:
-      'Menempuh studi S1 Informatika dengan IPK 3.40 / 4.00, berfokus pada pengembangan perangkat lunak, sistem informasi, dan pemrograman berorientasi objek.',
-    details: [
-      'IPK: 3.40 / 4.00',
-      'Asisten Dosen mata kuliah Pemrograman Berorientasi Objek (OOP)',
-      'Student Staff di Perpustakaan Universitas Atma Jaya Yogyakarta',
-    ],
-  },
+export interface Certification {
+  title: string;
+  issuer: string;
+  year: string;
+  skills: string;
+}
+
+export const workExperience: TimelineItem[] = [
   {
     type: 'work',
     title: 'Student Staff',
@@ -35,25 +28,25 @@ export const timeline: TimelineItem[] = [
     description:
       'Mendukung operasional layanan perpustakaan dan membantu administrasi koleksi perpustakaan secara terstruktur.',
     details: [
-      'Mendukung operasional layanan perpustakaan dan membantu pemustaka dalam proses peminjaman dan pengembalian koleksi.',
-      'Mengelola serta memeriksa data koleksi perpustakaan untuk memastikan kesesuaian informasi pada sistem dengan kondisi fisik koleksi.',
-      'Membantu memastikan kelancaran administrasi dan pelayanan perpustakaan sesuai prosedur yang berlaku.',
+      'Mendukung operasional layanan sirkulasi perpustakaan dan membantu pemustaka dalam proses peminjaman serta pengembalian koleksi.',
+      'Mengelola serta memverifikasi data koleksi fisik untuk memastikan kesesuaian informasi pada sistem katalog perpustakaan.',
+      'Membantu kelancaran administrasi layanan harian pemustaka sesuai standar operasional yang berlaku.',
     ],
   },
   {
     type: 'work',
-    title: 'IT System Support Plantation',
+    title: 'IT System Support Plantation (Magang)',
     institution: 'Great Giant Foods',
     location: 'Lampung, Indonesia',
     period: 'September 2025 – Maret 2026',
     description:
-      'Magang sebagai IT Business Partner, terlibat dalam perancangan dan pengembangan sistem operasional perkebunan yang terintegrasi dengan SAP.',
+      'Magang sebagai IT Business Partner, terlibat dalam perancangan dan pengembangan modul sistem operasional perkebunan yang terintegrasi dengan SAP.',
     details: [
       'Mengembangkan sistem operasional perkebunan yang terintegrasi dengan SAP, digunakan oleh mandor lapangan untuk pengelolaan data tenaga kerja secara terpusat.',
-      'Merancang dan mengimplementasikan sistem manajemen rapat untuk pencatatan isu, penunjukan PIC, serta monitoring tindak lanjut guna meningkatkan transparansi operasional.',
-      'Mengurangi proses pelaporan manual dan mempercepat alur pelaporan operasional melalui digitalisasi sistem.',
+      'Merancang dan mengimplementasikan modul manajemen rapat (Meetrack) untuk pencatatan notulensi rapat, penugasan PIC, dan monitoring progres tindak lanjut.',
+      'Mengurangi ketergantungan pada pencatatan manual dan mempercepat alur pelaporan data lapangan ke manajemen.',
     ],
-    tech: ['SAP', 'Laravel', 'MySQL', 'JavaScript'],
+    tech: ['SAP', 'Laravel', 'MySQL', 'Bootstrap'],
   },
   {
     type: 'work',
@@ -62,12 +55,83 @@ export const timeline: TimelineItem[] = [
     location: 'Yogyakarta, Indonesia',
     period: 'Februari 2025 – Juni 2025',
     description:
-      'Membimbing mahasiswa dalam memahami konsep Object-Oriented Programming (OOP) dengan bahasa pemrograman Java.',
+      'Membimbing 195 mahasiswa dalam memahami konsep Object-Oriented Programming (OOP) dan penanganan kesalahan (Exception Handling) menggunakan Java.',
     details: [
-      'Membimbing 195 mahasiswa dalam memahami konsep Object-Oriented Programming (OOP).',
-      'Merancang materi pembelajaran yang berfokus pada topik Exception Handling menggunakan bahasa pemrograman Java.',
-      'Menyusun soal latihan, tugas, dan modul pembelajaran untuk memperdalam pemahaman Exception Handling dan meningkatkan pemahaman mahasiswa.',
+      'Membimbing secara langsung 195 mahasiswa dalam sesi praktikum dan pemahaman konsep OOP.',
+      'Merancang modul pembelajaran dan materi praktikum dengan fokus pada implementasi Exception Handling berbasis Java.',
+      'Menyusun soal latihan terstruktur, studi kasus pemrograman, dan melakukan penilaian kode mahasiswa.',
     ],
-    tech: ['Java', 'OOP'],
+    tech: ['Java', 'OOP', 'Exception Handling'],
   },
 ];
+
+export const educationHistory: TimelineItem[] = [
+  {
+    type: 'education',
+    title: 'Sarjana Informatika (S.Kom.)',
+    institution: 'Universitas Atma Jaya Yogyakarta',
+    location: 'Yogyakarta, Indonesia',
+    period: 'Agustus 2022 – Agustus 2026',
+    description:
+      'Lulus S1 Informatika dengan IPK 3.40 / 4.00, berfokus pada rekayasa perangkat lunak, sistem informasi, dan perancangan basis data relasional.',
+    details: [
+      'Indeks Prestasi Kumulatif (IPK): 3.40 / 4.00.',
+      'Asisten Dosen mata kuliah Pemrograman Berorientasi Objek (OOP) Java.',
+      'Student Staff operasional Perpustakaan Universitas Atma Jaya Yogyakarta.',
+    ],
+    tech: ['Rekayasa Perangkat Lunak', 'Basis Data Relasional', 'Algoritma'],
+  },
+];
+
+export const organizationExperience: TimelineItem[] = [
+  {
+    type: 'organization',
+    title: 'Anggota Sekretaris',
+    institution: 'Sparkfest 12',
+    location: 'Yogyakarta, Indonesia',
+    period: 'September 2023 – Juni 2024',
+    description:
+      'Bertanggung jawab dalam pengelolaan administrasi dan data kepesertaan acara.',
+    details: [
+      'Mengelola data registrasi dan rekapitulasi peserta lomba menggunakan Microsoft Excel.',
+      'Berkoordinasi aktif dengan divisi acara untuk kelancaran jadwal dan komunikasi.',
+      'Merancang sertifikat digital peserta menggunakan Canva.',
+    ],
+    tech: ['Microsoft Excel', 'Canva'],
+  },
+  {
+    type: 'organization',
+    title: 'Anggota Keamanan',
+    institution: 'Sparkfest 11',
+    location: 'Yogyakarta, Indonesia',
+    period: 'Oktober 2022 – Agustus 2023',
+    description:
+      'Bertanggung jawab menjaga ketertiban dan kelancaran selama seluruh rangkaian kegiatan acara dan pertunjukan.',
+    details: [
+      'Menjaga ketertiban area panggung, peserta, dan penonton selama lomba dan konser.',
+      'Menyusun dan menegakkan peraturan ketertiban demi keamanan bersama.',
+    ],
+  },
+];
+
+export const certifications: Certification[] = [
+  {
+    title: 'Sertifikasi Pemrograman (Python, C, Dart, SQL, Back-End JS)',
+    issuer: 'Dicoding Indonesia',
+    year: '2023 – 2025',
+    skills: 'Python, Dart, SQL, JavaScript, RESTful API',
+  },
+  {
+    title: 'EnglishScore CEFR B1',
+    issuer: 'British Council',
+    year: '2024',
+    skills: 'Komunikasi Bahasa Inggris Kerja',
+  },
+];
+
+export const timeline: TimelineItem[] = [
+  ...workExperience,
+  ...organizationExperience,
+  ...educationHistory,
+];
+
