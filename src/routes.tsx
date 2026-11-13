@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router';
+import { createBrowserRouter, Navigate } from 'react-router';
 import Layout from './components/Layout';
 import Home from './pages/Home';
 import About from './pages/About';
@@ -17,6 +17,8 @@ export const router = createBrowserRouter([
       { path: 'projects', Component: Projects },
       { path: 'projects/:id', Component: ProjectDetail },
       { path: 'experience', Component: Experience },
+      { path: 'certificates', element: <Navigate to="/experience?tab=certifications" replace /> },
+      { path: 'sertifikat', element: <Navigate to="/experience?tab=certifications" replace /> },
       { path: 'contact', Component: Contact },
     ],
   },

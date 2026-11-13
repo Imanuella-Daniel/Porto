@@ -167,6 +167,19 @@ export default function About() {
                   <span>Hubungi Saya</span>
                 </Link>
               </div>
+
+              <div className="mx-auto max-w-sm pt-2">
+                <Link
+                  to="/experience?tab=certifications"
+                  className="group flex items-center justify-between rounded-xl border border-white/10 bg-white/[0.02] px-4 py-2.5 text-xs text-slate-400 transition-all duration-300 hover:border-blue-400/40 hover:bg-white/[0.04] hover:text-white no-underline"
+                >
+                  <span className="flex items-center gap-2">
+                    <span className="text-blue-400">📜</span>
+                    <span>12 Sertifikasi Profesional &amp; Prestasi</span>
+                  </span>
+                  <span className="font-mono text-[11px] text-blue-400 transition-transform group-hover:translate-x-0.5">Lihat ↗</span>
+                </Link>
+              </div>
             </aside>
           </Reveal>
 
