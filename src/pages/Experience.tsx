@@ -41,7 +41,6 @@ export default function Experience() {
   );
 
   const [certCategory, setCertCategory] = useState<string>("all");
-  const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedCert, setSelectedCert] = useState<Certification | null>(null);
 
   const handleTabChange = (tabId: TabFilter) => {
@@ -66,58 +65,45 @@ export default function Experience() {
         ? []
         : allTimelineItems.filter((item) => item.type === activeTab);
 
-  const showCertifications =
-    activeTab === "all" || activeTab === "certifications";
+  // Sertifikasi Profesional HANYA tampil jika klik tab sertifikasi
+  const showCertifications = activeTab === "certifications";
 
   const filteredCertifications = useMemo(() => {
-    return certifications.filter((cert) => {
-      const matchCat =
-        certCategory === "all" || cert.category === certCategory;
-
-      const q = searchQuery.toLowerCase().trim();
-      const matchQuery =
-        !q ||
-        cert.title.toLowerCase().includes(q) ||
-        cert.issuer.toLowerCase().includes(q) ||
-        (cert.partner && cert.partner.toLowerCase().includes(q)) ||
-        cert.skills.toLowerCase().includes(q) ||
-        (cert.credentialId && cert.credentialId.toLowerCase().includes(q));
-
-      return matchCat && matchQuery;
-    });
-  }, [certCategory, searchQuery]);
+    if (certCategory === "all") return certifications;
+    return certifications.filter((cert) => cert.category === certCategory);
+  }, [certCategory]);
 
   return (
     <main className="relative isolate min-h-screen w-full overflow-hidden bg-[#05070D] text-white">
       <AtmosphericBg />
 
       <div className="mx-auto max-w-7xl px-5 pb-24 pt-12 sm:px-8 sm:pt-20 lg:px-12 lg:pt-24">
-        {/* Page Header */}
-        <Reveal delay={0.1}>
-          <section className="mb-8 sm:mb-10">
-            <h1 className="text-3xl font-medium tracking-tight text-white sm:text-4xl md:text-5xl">
-              Pengalaman
-              <span className="text-blue-500">.</span>
-            </h1>
-            <p className="mt-2.5 max-w-2xl text-sm leading-relaxed text-slate-400 sm:text-base">
-              Rekam jejak pengalaman kerja, peran organisasi, serta sertifikasi kompetensi profesional dan prestasi akademik saya.
-            </p>
-          </section>
-        </Reveal>
+        {/* Page Header (hanya muncul jika BUKAN tab Sertifikasi) */}
+        {activeTab !== "certifications" && (
+          <Reveal delay={0.1}>
+            <section className="mb-8 sm:mb-10">
+              <h1 className="text-3xl font-medium tracking-tight text-white sm:text-4xl md:text-5xl">
+                Pengalaman
+                <span className="text-blue-500">.</span>
+              </h1>
+              <p className="mt-2.5 max-w-2xl text-sm leading-relaxed text-slate-400 sm:text-base">
+                Rekam jejak pengalaman kerja dan peran organisasi saya.
+              </p>
+            </section>
+          </Reveal>
+        )}
 
-        {/* Main Tabs */}
+        {/* Main Tabs (tanpa angka/jumlah) */}
         <Reveal delay={0.16}>
-          <div className="mb-14 flex flex-wrap items-center gap-2 border-t border-white/10 pt-8">
+          <div
+            className={`flex flex-wrap items-center gap-2 ${
+              activeTab !== "certifications"
+                ? "mb-14 border-t border-white/10 pt-8"
+                : "mb-10 pt-1 sm:pt-2"
+            }`}
+          >
             {tabs.map((tab) => {
               const active = activeTab === tab.id;
-              const count =
-                tab.id === "work"
-                  ? workExperience.length
-                  : tab.id === "organization"
-                    ? organizationExperience.length
-                    : tab.id === "certifications"
-                      ? certifications.length
-                      : allTimelineItems.length + certifications.length;
 
               return (
                 <button
@@ -132,13 +118,6 @@ export default function Experience() {
                 >
                   {active && <span className="mr-2 text-blue-400">✳</span>}
                   <span>{tab.label}</span>
-                  <span
-                    className={`ml-2 font-mono text-[10px] ${
-                      active ? "text-blue-300" : "text-slate-400"
-                    }`}
-                  >
-                    ({count})
-                  </span>
                 </button>
               );
             })}
@@ -229,234 +208,163 @@ export default function Experience() {
           </div>
         )}
 
-        {/* Certifications Section */}
+        {/* Certifications Section (Hanya tampil jika activeTab === "certifications") */}
         {showCertifications && (
           <Reveal delay={0.2}>
-            <section
-              className={`${
-                activeTab === "all" ? "border-t border-white/10 pt-16" : ""
-              }`}
-            >
-              <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-                <div>
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="h-2 w-2 rounded-full bg-blue-400 animate-pulse" />
-                    <span className="font-mono text-xs uppercase tracking-widest text-blue-400">
-                      Lisensi &amp; Sertifikat Resmi
-                    </span>
-                  </div>
-                  <h2 className="m-0 text-3xl font-medium tracking-tight text-white sm:text-4xl">
-                    Sertifikasi Profesional
-                    <span className="text-blue-500">.</span>
-                  </h2>
-                  <p className="mt-2 text-sm text-slate-400 max-w-2xl">
-                    Kumpulan 12 sertifikat kompetensi terverifikasi dari Dicoding Indonesia, AWS, Google Developers, British Council, dan Universitas Atma Jaya Yogyakarta.
-                  </p>
+            <section>
+              <div className="mb-8">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="h-2 w-2 rounded-full bg-blue-400 animate-pulse" />
+                  <span className="font-mono text-xs uppercase tracking-widest text-blue-400">
+                    Lisensi &amp; Sertifikat Resmi
+                  </span>
                 </div>
-                <span className="font-mono text-xs text-slate-400 self-start sm:self-end">
-                  Menampilkan {filteredCertifications.length} dari {certifications.length} sertifikat
-                </span>
+                <h1 className="m-0 text-3xl font-medium tracking-tight text-white sm:text-4xl md:text-5xl">
+                  Sertifikasi Profesional
+                  <span className="text-blue-500">.</span>
+                </h1>
+                <p className="mt-2.5 text-sm text-slate-400 max-w-2xl sm:text-base">
+                  Kumpulan 12 sertifikat kompetensi terverifikasi dari Dicoding Indonesia, AWS, Google Developers, British Council, dan Universitas Atma Jaya Yogyakarta.
+                </p>
               </div>
 
-              {/* Sub-filters & Search Bar */}
-              <div className="mb-10 space-y-4">
-                <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
-                  {/* Category Pills */}
-                  <div className="flex flex-wrap items-center gap-1.5 overflow-x-auto pb-1">
-                    {categoryFilters.map((cat) => {
-                      const active = certCategory === cat.id;
-                      const count =
-                        cat.id === "all"
-                          ? certifications.length
-                          : certifications.filter((c) => c.category === cat.id).length;
+              {/* Sub-filters Category Pills (tanpa angka/jumlah) */}
+              <div className="mb-10 flex flex-wrap items-center gap-1.5 overflow-x-auto pb-1">
+                {categoryFilters.map((cat) => {
+                  const active = certCategory === cat.id;
 
-                      if (count === 0 && cat.id !== "all") return null;
-
-                      return (
-                        <button
-                          key={cat.id}
-                          type="button"
-                          onClick={() => setCertCategory(cat.id)}
-                          className={`rounded-full px-3.5 py-1.5 text-xs font-mono transition-all duration-200 cursor-pointer ${
-                            active
-                              ? "bg-blue-500/20 text-blue-200 border border-blue-400/60 shadow-[0_0_12px_rgba(59,130,246,0.15)]"
-                              : "bg-white/[0.03] text-slate-400 border border-white/10 hover:text-slate-200 hover:border-white/20"
-                          }`}
-                        >
-                          {cat.label} ({count})
-                        </button>
-                      );
-                    })}
-                  </div>
-
-                  {/* Search Input */}
-                  <div className="relative min-w-[240px] md:w-72 shrink-0">
-                    <input
-                      type="text"
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder="Cari (JavaScript, SQL, Java...)"
-                      className="w-full rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-2 pl-9 text-xs text-white placeholder-slate-400 backdrop-blur-sm outline-none transition-colors focus:border-blue-400/50 focus:bg-white/[0.05]"
-                    />
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-400"
+                  return (
+                    <button
+                      key={cat.id}
+                      type="button"
+                      onClick={() => setCertCategory(cat.id)}
+                      className={`rounded-full px-3.5 py-1.5 text-xs font-mono transition-all duration-200 cursor-pointer ${
+                        active
+                          ? "bg-blue-500/20 text-blue-200 border border-blue-400/60 shadow-[0_0_12px_rgba(59,130,246,0.15)]"
+                          : "bg-white/[0.03] text-slate-400 border border-white/10 hover:text-slate-200 hover:border-white/20"
+                      }`}
                     >
-                      <path
-                        fillRule="evenodd"
-                        d="M9 3.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11ZM2 9a7 7 0 1 1 12.452 4.391l3.328 3.329a.75.75 0 1 1-1.06 1.06l-3.329-3.328A7 7 0 0 1 2 9Z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    {searchQuery && (
-                      <button
-                        type="button"
-                        onClick={() => setSearchQuery("")}
-                        className="absolute right-2.5 top-2 text-xs text-slate-400 hover:text-white cursor-pointer"
-                        title="Hapus pencarian"
-                      >
-                        ✕
-                      </button>
-                    )}
-                  </div>
-                </div>
+                      {cat.label}
+                    </button>
+                  );
+                })}
               </div>
 
               {/* Certificates Cards Grid */}
-              {filteredCertifications.length === 0 ? (
-                <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-12 text-center">
-                  <p className="font-serif italic text-lg text-slate-400">
-                    Tidak ditemukan sertifikat yang cocok dengan pencarian "{searchQuery}".
-                  </p>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setSearchQuery("");
-                      setCertCategory("all");
-                    }}
-                    className="mt-4 rounded-full border border-blue-400/30 bg-blue-500/10 px-4 py-2 text-xs font-mono text-blue-300 hover:bg-blue-500/20 cursor-pointer"
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                {filteredCertifications.map((cert) => (
+                  <div
+                    key={cert.id}
+                    className="group relative flex flex-col justify-between rounded-2xl border border-white/10 bg-white/[0.025] p-6 sm:p-7 backdrop-blur-sm transition-all duration-300 hover:border-blue-400/40 hover:bg-white/[0.038] hover:shadow-[0_0_36px_rgba(59,130,246,0.12)]"
                   >
-                    Reset Filter
-                  </button>
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                  {filteredCertifications.map((cert) => (
-                    <div
-                      key={cert.id}
-                      className="group relative flex flex-col justify-between rounded-2xl border border-white/10 bg-white/[0.025] p-6 sm:p-7 backdrop-blur-sm transition-all duration-300 hover:border-blue-400/40 hover:bg-white/[0.038] hover:shadow-[0_0_36px_rgba(59,130,246,0.12)]"
-                    >
-                      <div>
-                        {/* Header Badges */}
-                        <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
-                          <div className="flex flex-wrap items-center gap-1.5">
-                            <span className="rounded-full border border-blue-400/30 bg-blue-500/10 px-2.5 py-0.5 font-mono text-[10px] font-medium text-blue-300">
-                              {cert.issuer}
+                    <div>
+                      {/* Header Badges */}
+                      <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+                        <div className="flex flex-wrap items-center gap-1.5">
+                          <span className="rounded-full border border-blue-400/30 bg-blue-500/10 px-2.5 py-0.5 font-mono text-[10px] font-medium text-blue-300">
+                            {cert.issuer}
+                          </span>
+                          {cert.partner && (
+                            <span className="rounded-full border border-white/10 bg-white/[0.04] px-2 py-0.5 font-mono text-[10px] text-slate-300">
+                              {cert.partner}
                             </span>
-                            {cert.partner && (
-                              <span className="rounded-full border border-white/10 bg-white/[0.04] px-2 py-0.5 font-mono text-[10px] text-slate-300">
-                                {cert.partner}
-                              </span>
-                            )}
-                          </div>
-
-                          <div className="flex items-center gap-2">
-                            {cert.hours && (
-                              <span className="font-mono text-[11px] text-emerald-400">
-                                ⏱ {cert.hours}
-                              </span>
-                            )}
-                            {cert.score && (
-                              <span className="font-mono text-[11px] text-amber-400">
-                                🎯 {cert.score}
-                              </span>
-                            )}
-                            <span className="font-mono text-xs text-slate-400">
-                              {cert.year}
-                            </span>
-                          </div>
+                          )}
                         </div>
 
-                        {/* Title */}
-                        <h3 className="text-lg font-medium tracking-tight text-white group-hover:text-blue-200 transition-colors">
-                          {cert.title}
-                        </h3>
-
-                        {/* Description */}
-                        <p className="mt-3 text-xs leading-relaxed text-slate-400">
-                          {cert.description}
-                        </p>
-
-                        {/* Skills Badges */}
-                        {cert.skillsList && cert.skillsList.length > 0 && (
-                          <div className="mt-4 flex flex-wrap gap-1.5">
-                            {cert.skillsList.map((skill) => (
-                              <span
-                                key={skill}
-                                className="rounded-md border border-white/10 bg-white/[0.03] px-2 py-0.5 font-mono text-[10px] text-slate-300"
-                              >
-                                {skill}
-                              </span>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Card Footer Actions */}
-                      <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-white/[0.08] pt-4">
                         <div className="flex items-center gap-2">
-                          <button
-                            type="button"
-                            onClick={() => setSelectedCert(cert)}
-                            className="inline-flex items-center gap-1.5 rounded-lg border border-blue-400/40 bg-blue-500/15 px-3.5 py-1.5 text-xs font-medium text-blue-200 transition-all hover:bg-blue-500/25 hover:border-blue-400/60 cursor-pointer shadow-[0_0_16px_rgba(59,130,246,0.15)]"
-                          >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              viewBox="0 0 20 20"
-                              fill="currentColor"
-                              className="w-3.5 h-3.5"
-                            >
-                              <path d="M10 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
-                              <path
-                                fillRule="evenodd"
-                                d="M.664 10.59a1.651 1.651 0 0 1 0-1.186A10.004 10.004 0 0 1 10 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0 1 10 17c-4.257 0-7.893-2.66-9.336-6.41ZM14 10a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                            <span>Lihat Sertifikat</span>
-                          </button>
-
-                          <a
-                            href={cert.fileUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 rounded-lg border border-white/10 bg-white/[0.02] px-2.5 py-1.5 text-xs text-slate-400 hover:border-white/20 hover:text-slate-200 no-underline transition-all"
-                            title="Buka berkas di tab baru"
-                          >
-                            <span className="text-[11px] font-mono">Buka Tab</span>
-                            <span className="font-mono text-[10px]">↗</span>
-                          </a>
+                          {cert.hours && (
+                            <span className="font-mono text-[11px] text-emerald-400">
+                              ⏱ {cert.hours}
+                            </span>
+                          )}
+                          {cert.score && (
+                            <span className="font-mono text-[11px] text-amber-400">
+                              🎯 {cert.score}
+                            </span>
+                          )}
+                          <span className="font-mono text-xs text-slate-400">
+                            {cert.year}
+                          </span>
                         </div>
-
-                        {cert.credentialUrl && (
-                          <a
-                            href={cert.credentialUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="font-mono text-xs text-blue-400 hover:text-blue-300 hover:underline flex items-center gap-1 no-underline"
-                            title="Verifikasi kredensial sertifikat online"
-                          >
-                            <span>Verifikasi</span>
-                            <span>↗</span>
-                          </a>
-                        )}
                       </div>
+
+                      {/* Title */}
+                      <h3 className="text-lg font-medium tracking-tight text-white group-hover:text-blue-200 transition-colors">
+                        {cert.title}
+                      </h3>
+
+                      {/* Description */}
+                      <p className="mt-3 text-xs leading-relaxed text-slate-400">
+                        {cert.description}
+                      </p>
+
+                      {/* Skills Badges */}
+                      {cert.skillsList && cert.skillsList.length > 0 && (
+                        <div className="mt-4 flex flex-wrap gap-1.5">
+                          {cert.skillsList.map((skill) => (
+                            <span
+                              key={skill}
+                              className="rounded-md border border-white/10 bg-white/[0.03] px-2 py-0.5 font-mono text-[10px] text-slate-300"
+                            >
+                              {skill}
+                            </span>
+                          ))}
+                        </div>
+                      )}
                     </div>
-                  ))}
-                </div>
-              )}
+
+                    {/* Card Footer Actions */}
+                    <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-white/[0.08] pt-4">
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => setSelectedCert(cert)}
+                          className="inline-flex items-center gap-1.5 rounded-lg border border-blue-400/40 bg-blue-500/15 px-3.5 py-1.5 text-xs font-medium text-blue-200 transition-all hover:bg-blue-500/25 hover:border-blue-400/60 cursor-pointer shadow-[0_0_16px_rgba(59,130,246,0.15)]"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                            className="w-3.5 h-3.5"
+                          >
+                            <path d="M10 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
+                            <path
+                              fillRule="evenodd"
+                              d="M.664 10.59a1.651 1.651 0 0 1 0-1.186A10.004 10.004 0 0 1 10 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0 1 10 17c-4.257 0-7.893-2.66-9.336-6.41ZM14 10a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                          <span>Lihat Sertifikat</span>
+                        </button>
+
+                        <a
+                          href={cert.fileUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 rounded-lg border border-white/10 bg-white/[0.02] px-2.5 py-1.5 text-xs text-slate-400 hover:border-white/20 hover:text-slate-200 no-underline transition-all"
+                          title="Buka berkas di tab baru"
+                        >
+                          <span className="text-[11px] font-mono">Buka Tab</span>
+                          <span className="font-mono text-[10px]">↗</span>
+                        </a>
+                      </div>
+
+                      {cert.credentialUrl && (
+                        <a
+                          href={cert.credentialUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-mono text-xs text-blue-400 hover:text-blue-300 hover:underline flex items-center gap-1 no-underline"
+                          title="Verifikasi kredensial sertifikat online"
+                        >
+                          <span>Verifikasi</span>
+                          <span>↗</span>
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </section>
           </Reveal>
         )}
