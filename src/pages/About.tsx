@@ -3,8 +3,9 @@ import Reveal from "../components/Reveal";
 import AtmosphericBg from "../components/AtmosphericBg";
 import { skillCategories } from "../data/skills";
 import profilePhoto from "../assets/DSC07436.JPG";
+import fullBodyPhoto from "../assets/Foto Seluruh Badan Depan_Imanuella Daniel.jpg";
 import cvPdf from "../assets/CV_Imanuella Daniel.pdf";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const logoMap: Record<string, string> = {
   PHP: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/php/php-original.svg",
@@ -57,44 +58,94 @@ const logoMap: Record<string, string> = {
   Railway:
     "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/railway/railway-original.svg",
 };
+const photos = [
+  {
+    id: "formal",
+    src: fullBodyPhoto,
+    objectClass: "object-cover object-top scale-[1.12] origin-top",
+    thumbClass: "object-cover object-top",
+    cardBg: "bg-[#0d111e]",
+    lightboxClass:
+      "max-h-[88vh] max-w-full rounded-2xl border border-white/15 object-contain bg-white/5 p-2 shadow-[0_20px_80px_rgba(0,0,0,0.7)]",
+  },
+  {
+    id: "profile",
+    src: profilePhoto,
+    objectClass: "object-cover object-[center_20%]",
+    thumbClass: "object-cover object-[center_20%]",
+    cardBg: "bg-transparent",
+    lightboxClass:
+      "max-h-[85vh] max-w-full rounded-2xl border border-white/15 object-contain shadow-[0_20px_80px_rgba(0,0,0,0.7)]",
+  },
+];
+
 export default function About() {
+  const [activePhotoIndex, setActivePhotoIndex] = useState(0);
   const [isPhotoOpen, setIsPhotoOpen] = useState(false);
+
+  useEffect(() => {
+    if (!isPhotoOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsPhotoOpen(false);
+      if (e.key === "ArrowLeft") {
+        setActivePhotoIndex((prev) =>
+          prev > 0 ? prev - 1 : photos.length - 1,
+        );
+      }
+      if (e.key === "ArrowRight") {
+        setActivePhotoIndex((prev) =>
+          prev < photos.length - 1 ? prev + 1 : 0,
+        );
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isPhotoOpen]);
+
+  const currentPhoto = photos[activePhotoIndex];
 
   return (
     <main className="relative isolate min-h-screen w-full overflow-hidden bg-[#05070D] text-white">
       <AtmosphericBg />
 
       <div className="mx-auto max-w-7xl px-5 pb-24 pt-12 sm:px-8 sm:pt-20 lg:px-12 lg:pt-24">
-        <div className="grid grid-cols-1 gap-14 pt-6 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
+        <div className="grid grid-cols-1 gap-12 pt-6 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
           <Reveal delay={0.16}>
             <aside className="lg:sticky lg:top-28 space-y-6">
               <div className="relative mx-auto max-w-sm overflow-hidden rounded-3xl border border-white/15 bg-white/[0.02] p-2.5 shadow-[0_20px_50px_rgba(0,0,0,0.6)]">
-                <div className="relative aspect-[3/4] w-full overflow-hidden rounded-2xl">
+                {/* Main Photo Frame - Half-body focus & smooth dark mode blend */}
+                <div
+                  className={`relative aspect-[4/5] w-full overflow-hidden rounded-2xl border border-white/10 ${currentPhoto.cardBg} shadow-inner`}
+                >
                   <button
                     type="button"
                     onClick={() => setIsPhotoOpen(true)}
-                    className="group h-full w-full cursor-zoom-in"
+                    className="group relative h-full w-full cursor-zoom-in overflow-hidden"
                     aria-label="Perbesar foto profil"
                   >
                     <img
-                      src={profilePhoto}
+                      src={currentPhoto.src}
                       alt="Imanuella Daniel"
-                      className="h-full w-full object-cover object-[center_20%] transition-transform duration-700 group-hover:scale-[1.03]"
+                      className={`h-full w-full transition-transform duration-700 group-hover:scale-[1.04] ${currentPhoto.objectClass}`}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#05070D]/80 via-transparent to-transparent pointer-events-none" />
+                    {/* Soft gradient overlay to blend bright background naturally with dark mode */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#05070D]/40 via-transparent to-black/10 pointer-events-none" />
+                    <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/10 pointer-events-none" />
                   </button>
                 </div>
               </div>
 
+              {/* Lightbox Modal */}
               {isPhotoOpen && (
                 <div
-                  className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/85 p-5 backdrop-blur-md animate-in fade-in duration-300"
+                  className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 p-4 sm:p-6 backdrop-blur-md animate-in fade-in duration-300"
                   onClick={() => setIsPhotoOpen(false)}
                 >
+                  {/* Close button */}
                   <button
                     type="button"
                     onClick={() => setIsPhotoOpen(false)}
-                    className="absolute right-6 top-6 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white transition-all hover:bg-white/20"
+                    className="absolute right-6 top-6 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white transition-all hover:bg-white/20 cursor-pointer"
                     aria-label="Tutup foto"
                   >
                     <svg
@@ -113,12 +164,43 @@ export default function About() {
                     </svg>
                   </button>
 
+                  {/* Previous Button */}
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setActivePhotoIndex((prev) =>
+                        prev > 0 ? prev - 1 : photos.length - 1,
+                      );
+                    }}
+                    className="absolute left-4 sm:left-8 z-10 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-white/20 bg-black/60 text-white text-xl sm:text-2xl transition-all hover:bg-white/20 cursor-pointer"
+                    aria-label="Foto sebelumnya"
+                  >
+                    ‹
+                  </button>
+
+                  {/* Main Image */}
                   <img
-                    src={profilePhoto}
+                    src={currentPhoto.src}
                     alt="Imanuella Daniel"
                     onClick={(e) => e.stopPropagation()}
-                    className="max-h-[85vh] max-w-full rounded-2xl border border-white/15 object-contain shadow-[0_20px_80px_rgba(0,0,0,0.7)] animate-in zoom-in-95 duration-300"
+                    className={`${currentPhoto.lightboxClass} animate-in zoom-in-95 duration-300`}
                   />
+
+                  {/* Next Button */}
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setActivePhotoIndex((prev) =>
+                        prev < photos.length - 1 ? prev + 1 : 0,
+                      );
+                    }}
+                    className="absolute right-4 sm:right-8 z-10 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-white/20 bg-black/60 text-white text-xl sm:text-2xl transition-all hover:bg-white/20 cursor-pointer"
+                    aria-label="Foto selanjutnya"
+                  >
+                    ›
+                  </button>
                 </div>
               )}
 
@@ -143,7 +225,7 @@ export default function About() {
                       d="M19.5 14.25v-9a2.25 2.25 0 0 0-2.25-2.25h-10A2.25 2.25 0 0 0 5 5.25v13.5A2.25 2.25 0 0 0 7.25 21h7.5m4.75-6.75v6.75m0 0 3-3m-3 3-3-3M8 7.5h7m-7 3h5"
                     />
                   </svg>
-                  <span>Download CV</span>
+                  <span>Unduh CV</span>
                 </a>
 
                 <Link
@@ -177,7 +259,9 @@ export default function About() {
                     <span className="text-blue-400">📜</span>
                     <span>12 Sertifikasi Profesional &amp; Prestasi</span>
                   </span>
-                  <span className="font-mono text-[11px] text-blue-400 transition-transform group-hover:translate-x-0.5">Lihat ↗</span>
+                  <span className="font-mono text-[11px] text-blue-400 transition-transform group-hover:translate-x-0.5">
+                    Lihat ↗
+                  </span>
                 </Link>
               </div>
             </aside>
@@ -191,39 +275,68 @@ export default function About() {
                 </h2>
               </div>
 
-              <div className="space-y-4 text-sm leading-8 text-slate-300 sm:text-base sm:leading-8">
+              <div className="space-y-4 text-sm leading-relaxed text-slate-300 sm:text-base sm:leading-8">
                 <p>
                   Saya merupakan lulusan S1 Informatika dari Universitas Atma
-                  Jaya Yogyakarta. Saya memiliki minat mendalam pada
-                  pengembangan sistem perangkat lunak, perancangan basis data
-                  relasional, dan integrasi modul enterprise yang menunjang
-                  otomasi proses bisnis nyata.
+                  Jaya Yogyakarta dengan fokus pada{" "}
+                  <strong className="font-semibold text-white">
+                    pengembangan sistem perangkat lunak
+                  </strong>
+                  ,{" "}
+                  <strong className="font-semibold text-white">
+                    basis data relasional
+                  </strong>
+                  , dan{" "}
+                  <strong className="font-semibold text-white">
+                    integrasi sistem <span className="italic">enterprise</span>
+                  </strong>{" "}
+                  untuk otomasi proses bisnis.
                 </p>
 
                 <p>
-                  Selama masa magang sebagai IT System Support Plantation di
-                  Great Giant Foods, saya berkolaborasi sebagai IT Business
-                  Partner dalam perancangan dan implementasi modul operasional
-                  perkebunan terintegrasi SAP, serta membangun aplikasi
-                  monitoring penugasan rapat internal (Meetrack). Pengalaman
-                  tersebut melatih cara saya menghubungkan kebutuhan operasional
-                  bisnis dengan arsitektur teknis yang stabil.
+                  Selama bekerja sebagai{" "}
+                  <strong className="font-semibold text-white">
+                    IT System Support Plantation di Great Giant Foods
+                  </strong>
+                  , saya merancang serta mengimplementasikan modul operasional
+                  perkebunan yang{" "}
+                  <strong className="font-semibold text-white">
+                    terintegrasi SAP
+                  </strong>{" "}
+                  dan membangun aplikasi monitoring rapat internal bernama
+                  <strong className="font-semibold text-white">
+                    {" "}
+                    MeeTrack
+                  </strong>
+                  . Dalam pengembangannya, saya menguasai{" "}
+                  <strong className="font-semibold text-white">
+                    React, TypeScript, dan Tailwind CSS
+                  </strong>{" "}
+                  untuk <span className="italic">front-end</span>;{" "}
+                  <strong className="font-semibold text-white">
+                    PHP (Laravel) dan Java
+                  </strong>{" "}
+                  untuk <span className="italic">back-end</span> serta RESTful
+                  API;{" "}
+                  <strong className="font-semibold text-white">Flutter</strong>{" "}
+                  untuk <span className="italic">mobile</span>; serta{" "}
+                  <strong className="font-semibold text-white">
+                    MySQL, PostgreSQL, dan SQL Server
+                  </strong>
+                  .
                 </p>
 
                 <p>
-                  Teknologi utama yang saya kuasai meliputi React, TypeScript,
-                  dan Tailwind CSS pada ekosistem web modern; PHP dan Laravel
-                  untuk arsitektur back-end dan RESTful API yang kokoh; Flutter
-                  untuk solusi mobile multiplatform; serta MySQL dan PostgreSQL
-                  untuk manajemen basis data.
-                </p>
-
-                <p>
-                  Selain pengalaman teknis, peran saya sebagai Asisten Dosen
-                  mata kuliah Pemrograman Berorientasi Objek (OOP) Java dan
-                  Student Staff di perpustakaan kampus membentuk kemampuan
-                  komunikasi, empati kerja, kepemimpinan tim, serta kedisiplinan
-                  kerja.
+                  Selain kemampuan teknis, peran saya sebagai{" "}
+                  <strong className="font-semibold text-white">
+                    Asisten Dosen OOP Java
+                  </strong>{" "}
+                  dan{" "}
+                  <strong className="font-semibold text-white">
+                    Student Staff Perpustakaan
+                  </strong>{" "}
+                  turut membentuk kemampuan komunikasi, ketelitian, serta
+                  kedisiplinan kerja dalam tim.
                 </p>
               </div>
             </div>

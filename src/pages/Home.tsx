@@ -99,16 +99,16 @@ export default function Home() {
             </h1>
 
             <p className="mx-auto mt-8 max-w-2xl text-sm leading-7 text-slate-400 sm:text-base sm:leading-8">
-              Software Developer &amp; Information System Specialist. Membangun
-              pengalaman digital yang{" "}
+              Lulusan Informatika dengan fokus pada pengembangan perangkat lunak
+              dan sistem informasi. Membangun aplikasi yang{" "}
               <span className="text-white">fungsional, terstruktur,</span> dan
-              dirancang dengan presisi tujuan.
+              siap digunakan.
             </p>
 
             <div className="mt-5 flex flex-wrap items-center justify-center gap-2.5 font-mono text-xs text-slate-500">
               <span className="text-slate-300">Software Developer</span>
               <span className="text-blue-400">/</span>
-              <span>Informatics Graduate</span>
+              <span>Computer Science</span>
               <span className="text-blue-400">/</span>
               <span>Yogyakarta, Indonesia</span>
             </div>
